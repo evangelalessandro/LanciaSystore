@@ -59,5 +59,31 @@ namespace LanciaSystore.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a  
+        ///
+        ///DECLARE @machineName nvarchar(100)=&apos;#MACHINE_NAME#&apos;
+        ///
+        ///SELECT @machineName machineName, @machineName NameMas
+        ///INTO #tmp 
+        ///    
+        ///
+        ///WHILE EXISTS(SELECT 1 FROM #tmp WHERE NameMas LIKE &apos;%-%&apos; OR NameMas LIKE &apos;% %&apos;)
+        ///begin
+        ///  UPDATE #tmp
+        ///  SET NameMas=REPLACE(NameMas,&apos;-&apos;,&apos;&apos;)
+        ///
+        ///  UPDATE #tmp
+        ///  SET NameMas=REPLACE(NameMas,&apos; &apos;,&apos;&apos;)
+        ///END 
+        ///
+        ///INSERT INTO #DBNAME#.dbo.GESTORI_MASTER (MAS_MASTER, MAS_DES, MAS_LIVLOG, MAS_IP, MAS_PORT, MAS_WORKSTATION, MAS_ELEAREE, MAS_CKLICENZA, MAS_ABI, MAS_RUOLI,  MAS_NO_AUTOLO [stringa troncata]&quot;;.
+        /// </summary>
+        internal static string QueryAddMaster {
+            get {
+                return ResourceManager.GetString("QueryAddMaster", resourceCulture);
+            }
+        }
     }
 }

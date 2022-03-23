@@ -12,12 +12,12 @@ namespace LanciaSystore
     {
         SqlConnection _connection;
         string _dataSource;
-        InstanceSqlData _InstanceData=null;
-        public string DataSource { get {return _dataSource; } }
+        InstanceSqlData _InstanceData = null;
+        public string DataSource { get { return _dataSource; } }
 
-        public InstanceSqlData InstanceData { get {return _InstanceData; } }
+        public InstanceSqlData InstanceData { get { return _InstanceData; } }
 
-        public  TestConnessione(string dataSource)
+        public TestConnessione(string dataSource)
         {
             _dataSource = dataSource;
             _connection = ProvaConnessione(dataSource, "SYSTEM_ITALI");
@@ -27,18 +27,17 @@ namespace LanciaSystore
 
 
             if (_connection != null)
-                ReadData(); 
+                ReadData();
         }
-
+      
         private void ReadData()
         {
-           var sqlDatabases= "SELECT name " +
-                    " FROM sys.databases d " +
-                    " WHERE d.database_id > 4  AND name NOT LIKE '%_HISTORY' " +
-                    " AND name NOT LIKE '%_IMPEXP'";
+            var sqlDatabases = "SELECT name " +
+                     " FROM sys.databases d " +
+                     " WHERE d.database_id > 4  AND name NOT LIKE '%_HISTORY' " +
+                     " AND name NOT LIKE '%_IMPEXP'";
 
-            var sqlMasterList = "SELECT MAS_MASTER FROM {1}.dbo.GESTORI_MASTER WHERE MAS_IP='localHost' OR MAS_WORKSTATION ='{0}'";
-            sqlMasterList=sqlMasterList.Replace("{0}", Environment.MachineName);
+
 
             InstanceSqlData instanceSqlData = new InstanceSqlData();
 
@@ -51,25 +50,37 @@ namespace LanciaSystore
 
 
                 instanceSqlData.DbList.Add(itemDb);
+                RefreshMaster(dbName, itemDb);
 
-                var sqlmaster = sqlMasterList.Replace("{1}", dbName);
-                try
-                {
-                    foreach (var masterName in GetListString(sqlmaster))
-                    {
-                        itemDb.MasterName.Add(masterName);
-                    }
-                }
-                catch (SqlException ex)
-                {
-
-                    
-                }
-                
             }
             _InstanceData = instanceSqlData;
 
         }
+        public void RefreshMaster(string dbName)
+        {
+            RefreshMaster(dbName, InstanceData.DbList.Where(a => a.Database == dbName).First());
+
+        }
+
+        private void RefreshMaster(string dbName, DataBaseInstanceSql itemDb)
+        {
+            var sqlMasterList = "SELECT MAS_MASTER FROM {1}.dbo.GESTORI_MASTER WHERE MAS_IP='localHost' OR MAS_WORKSTATION ='{0}'";
+            sqlMasterList = sqlMasterList.Replace("{0}", Environment.MachineName);
+            var sqlmaster = sqlMasterList.Replace("{1}", dbName);
+            try
+            {
+                foreach (var masterName in GetListString(sqlmaster))
+                {
+                    itemDb.MasterName.Add(masterName);
+                }
+            }
+            catch (SqlException ex)
+            {
+
+
+            }
+        }
+
         private List<string> GetListString(string query)
         {
             var list = new List<string>();
@@ -81,7 +92,7 @@ namespace LanciaSystore
             return list;
         }
 
-            private List<DataRow> GetData(string query)
+        private List<DataRow> GetData(string query)
         {
 
             List<DataRow> dataList = new List<DataRow>();
@@ -92,12 +103,12 @@ namespace LanciaSystore
                 foreach (DataRow item in dt.Rows)
                 {
                     dataList.Add(item);
-                 }
+                }
             }
             return dataList;
 
         }
-        
+
 
         public SqlConnection Connessione { get { return _connection; } }
 

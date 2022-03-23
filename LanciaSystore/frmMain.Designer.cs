@@ -38,6 +38,7 @@
             this.lstCommonFolder = new System.Windows.Forms.ListBox();
             this.label3 = new System.Windows.Forms.Label();
             this.cbodataSource = new System.Windows.Forms.ComboBox();
+            this.btnAddMaster = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button1
@@ -60,6 +61,7 @@
             // lstDatabase
             // 
             this.lstDatabase.FormattingEnabled = true;
+            this.lstDatabase.HorizontalScrollbar = true;
             this.lstDatabase.Location = new System.Drawing.Point(24, 85);
             this.lstDatabase.Name = "lstDatabase";
             this.lstDatabase.Size = new System.Drawing.Size(258, 238);
@@ -87,14 +89,15 @@
             // lstMaster
             // 
             this.lstMaster.FormattingEnabled = true;
+            this.lstMaster.HorizontalScrollbar = true;
             this.lstMaster.Location = new System.Drawing.Point(327, 85);
             this.lstMaster.Name = "lstMaster";
-            this.lstMaster.Size = new System.Drawing.Size(258, 238);
+            this.lstMaster.Size = new System.Drawing.Size(238, 238);
             this.lstMaster.TabIndex = 4;
             // 
             // btnAvvia
             // 
-            this.btnAvvia.Location = new System.Drawing.Point(813, 300);
+            this.btnAvvia.Location = new System.Drawing.Point(825, 300);
             this.btnAvvia.Name = "btnAvvia";
             this.btnAvvia.Size = new System.Drawing.Size(75, 23);
             this.btnAvvia.TabIndex = 6;
@@ -105,15 +108,16 @@
             // lstCommonFolder
             // 
             this.lstCommonFolder.FormattingEnabled = true;
-            this.lstCommonFolder.Location = new System.Drawing.Point(601, 85);
+            this.lstCommonFolder.HorizontalScrollbar = true;
+            this.lstCommonFolder.Location = new System.Drawing.Point(637, 85);
             this.lstCommonFolder.Name = "lstCommonFolder";
-            this.lstCommonFolder.Size = new System.Drawing.Size(206, 238);
+            this.lstCommonFolder.Size = new System.Drawing.Size(173, 238);
             this.lstCommonFolder.TabIndex = 7;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(598, 66);
+            this.label3.Location = new System.Drawing.Point(634, 69);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(77, 13);
             this.label3.TabIndex = 8;
@@ -127,11 +131,22 @@
             this.cbodataSource.Size = new System.Drawing.Size(268, 21);
             this.cbodataSource.TabIndex = 9;
             // 
+            // btnAddMaster
+            // 
+            this.btnAddMaster.Location = new System.Drawing.Point(579, 85);
+            this.btnAddMaster.Name = "btnAddMaster";
+            this.btnAddMaster.Size = new System.Drawing.Size(52, 79);
+            this.btnAddMaster.TabIndex = 10;
+            this.btnAddMaster.Text = "Add Master";
+            this.btnAddMaster.UseVisualStyleBackColor = true;
+            this.btnAddMaster.Click += new System.EventHandler(this.addMaster_Click);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(912, 342);
+            this.Controls.Add(this.btnAddMaster);
             this.Controls.Add(this.cbodataSource);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.lstCommonFolder);
@@ -162,6 +177,7 @@
         private System.Windows.Forms.ListBox lstCommonFolder;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ComboBox cbodataSource;
+        private System.Windows.Forms.Button btnAddMaster;
     }
 }
 

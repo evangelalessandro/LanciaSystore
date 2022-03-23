@@ -28,7 +28,10 @@ namespace LanciaSystore
         public void StrartProc(string sqlserverInstance,string MasterName,string CommonFolder,string plantName, string database)
         {
             if (!ExistsExe())
+            {
+                MessageBox.Show("Manca l'eseguibile");
                 return ;
+            }
             string parameter = "";
             parameter = "PathFilesCommon={Common};DataSource={ServerSql};" +
                 "InitialCatalog={DB};Name={MASTER};PlantName={PLANTNAME};";

@@ -4,39 +4,51 @@ using System.Windows.Forms;
 
 namespace LanciaSystore
 {
-	internal class Exe_SystemLogisticsApp4
+	internal class Exe_dbupodate
 	{
-		public static string NameFile = "SystemLogisticsApp4.exe";
+		public static string NameFile = "DBUpdate.exe";
 		private System.IO.FileInfo _fileExe;
-		public Exe_SystemLogisticsApp4()
+		private string FolderDatabase
 		{
-			ExistsExe();
+			get
+			{
+				return System.IO.Path.Combine(System.IO.Path.GetDirectoryName(
+			  System.Reflection.Assembly.GetExecutingAssembly().Location), @"Database");
+			}
+		}
+		public Exe_dbupodate()
+		{
+			 
 		}
 
 		public bool ExistsExe()
 		{
-			_fileExe = new System.IO.DirectoryInfo(Environment.CurrentDirectory).EnumerateFiles(NameFile).FirstOrDefault();
-			if (_fileExe == null)
+			var path = System.IO.Path.Combine(FolderDatabase,@"DBScripting" , NameFile);
+			_fileExe = new System.IO.FileInfo(path);
+			
+			if (_fileExe == null && _fileExe.Exists)
 				return false;
 			return true;
 
 		}
 
-		public void StrartProc(string sqlserverInstance, string MasterName, string CommonFolder, string plantName, string database)
+		public void StrartProc(string sqlserverInstance, string database)
 		{
 			if (!ExistsExe())
 			{
 				MessageBox.Show("Manca l'eseguibile");
 				return;
 			}
+			/*"C:\SystemLogistics.net\old\OMSI_VI19IM012\Database\DBScripting\DBUPDATE.EXE" 
+			 * - s omsi - sys1\zmagma - u system_itali - p SYS123 - d WSOMSI - f 
+			 * "C:\SystemLogistics.net\old\OMSI_VI19IM012\Database\WSOMSI"
+			 * */
 			string parameter = "";
-			parameter = "PathFilesCommon={Common};DataSource={ServerSql};" +
-				"InitialCatalog={DB};Name={MASTER};PlantName={PLANTNAME};";
+			parameter = @" - s {ServerSql} - u system_itali - p SYS123 - d {DB} - f {FOLDER}";
 
-			parameter = parameter.Replace("{Common}", CommonFolder);
 			parameter = parameter.Replace("{ServerSql}", sqlserverInstance);
-			parameter = parameter.Replace("{MASTER}", MasterName);
-			parameter = parameter.Replace("{PLANTNAME}", plantName);
+			parameter = parameter.Replace("{FOLDER}", System.IO.Path.Combine(FolderDatabase , database));
+
 			parameter = parameter.Replace("{DB}", database);
 
 

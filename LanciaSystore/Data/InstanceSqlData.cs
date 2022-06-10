@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace LanciaSystore
 {
-    internal class InstanceSqlData
-    {
-        public string InstanceSql { get; set; }
-        public List<DataBaseInstanceSql>  DbList{get;set;}
+	internal class InstanceSqlData
+	{
+		public string InstanceSql { get; set; }
+		public List<DataBaseInstanceSql> DbList { get; set; }
 
-    }
+	}
 }

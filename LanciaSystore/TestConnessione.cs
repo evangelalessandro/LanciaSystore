@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -133,10 +134,14 @@ namespace LanciaSystore
 			}
 		}
 
-		internal void ApplyDebug()
+		internal void ApplyDebug(string database)
 		{
-			EseguiCommand(
-				"UPDATE UTI_WORK  set WOR_NUM = 1  where WOR_COD = 'DEBUG'");
+			if (System.Windows.Forms.MessageBox.Show("Sei sicuro di non essere in produzione?", "Domanda", System.Windows.Forms.MessageBoxButtons.YesNo)
+						== System.Windows.Forms.DialogResult.Yes)
+			{
+				EseguiCommand(
+					"  USE  " + database + "    UPDATE UTI_WORK  set WOR_NUM = 1  where WOR_COD = 'DEBUG'");
+			}
 		}
 
 		internal void AddMaster(string database)

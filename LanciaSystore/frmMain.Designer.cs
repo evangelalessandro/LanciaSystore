@@ -28,206 +28,216 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.button1 = new System.Windows.Forms.Button();
-			this.txtDataSource = new System.Windows.Forms.TextBox();
-			this.lstDatabase = new System.Windows.Forms.ListBox();
-			this.label1 = new System.Windows.Forms.Label();
-			this.label2 = new System.Windows.Forms.Label();
-			this.lstMaster = new System.Windows.Forms.ListBox();
-			this.btnAvvia = new System.Windows.Forms.Button();
-			this.lstCommonFolder = new System.Windows.Forms.ListBox();
-			this.label3 = new System.Windows.Forms.Label();
-			this.cbodataSource = new System.Windows.Forms.ComboBox();
-			this.btnAddMaster = new System.Windows.Forms.Button();
-			this.btnDebug = new System.Windows.Forms.Button();
-			this.btnDbUpdate = new System.Windows.Forms.Button();
-			this.btnLeggiDbCombo = new System.Windows.Forms.Button();
-			this.SuspendLayout();
+			button1 = new System.Windows.Forms.Button();
+			txtDataSource = new System.Windows.Forms.TextBox();
+			lstDatabase = new System.Windows.Forms.ListBox();
+			label1 = new System.Windows.Forms.Label();
+			label2 = new System.Windows.Forms.Label();
+			lstMaster = new System.Windows.Forms.ListBox();
+			btnAvvia = new System.Windows.Forms.Button();
+			lstCommonFolder = new System.Windows.Forms.ListBox();
+			label3 = new System.Windows.Forms.Label();
+			cbodataSource = new System.Windows.Forms.ComboBox();
+			btnAddMaster = new System.Windows.Forms.Button();
+			btnDebug = new System.Windows.Forms.Button();
+			btnDbUpdate = new System.Windows.Forms.Button();
+			btnLeggiDbCombo = new System.Windows.Forms.Button();
+			button2 = new System.Windows.Forms.Button();
+			SuspendLayout();
 			// 
 			// button1
 			// 
-			this.button1.Location = new System.Drawing.Point(297, 27);
-			this.button1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-			this.button1.Name = "button1";
-			this.button1.Size = new System.Drawing.Size(100, 28);
-			this.button1.TabIndex = 0;
-			this.button1.Text = "LeggiDb";
-			this.button1.UseVisualStyleBackColor = true;
-			this.button1.Click += new System.EventHandler(this.btnConnect_Click);
+			button1.Location = new System.Drawing.Point(260, 25);
+			button1.Margin = new System.Windows.Forms.Padding(4);
+			button1.Name = "button1";
+			button1.Size = new System.Drawing.Size(88, 26);
+			button1.TabIndex = 0;
+			button1.Text = "LeggiDb";
+			button1.UseVisualStyleBackColor = true;
+			button1.Click += btnConnect_Click;
 			// 
 			// txtDataSource
 			// 
-			this.txtDataSource.Location = new System.Drawing.Point(32, 27);
-			this.txtDataSource.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-			this.txtDataSource.Name = "txtDataSource";
-			this.txtDataSource.Size = new System.Drawing.Size(256, 22);
-			this.txtDataSource.TabIndex = 1;
+			txtDataSource.Location = new System.Drawing.Point(28, 25);
+			txtDataSource.Margin = new System.Windows.Forms.Padding(4);
+			txtDataSource.Name = "txtDataSource";
+			txtDataSource.Size = new System.Drawing.Size(224, 23);
+			txtDataSource.TabIndex = 1;
 			// 
 			// lstDatabase
 			// 
-			this.lstDatabase.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-			| System.Windows.Forms.AnchorStyles.Left)));
-			this.lstDatabase.FormattingEnabled = true;
-			this.lstDatabase.HorizontalScrollbar = true;
-			this.lstDatabase.ItemHeight = 16;
-			this.lstDatabase.Location = new System.Drawing.Point(32, 105);
-			this.lstDatabase.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-			this.lstDatabase.Name = "lstDatabase";
-			this.lstDatabase.Size = new System.Drawing.Size(343, 244);
-			this.lstDatabase.TabIndex = 2;
-			this.lstDatabase.SelectedIndexChanged += new System.EventHandler(this.lstDatabase_SelectedIndexChanged);
+			lstDatabase.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
+			lstDatabase.FormattingEnabled = true;
+			lstDatabase.HorizontalScrollbar = true;
+			lstDatabase.ItemHeight = 15;
+			lstDatabase.Location = new System.Drawing.Point(28, 98);
+			lstDatabase.Margin = new System.Windows.Forms.Padding(4);
+			lstDatabase.Name = "lstDatabase";
+			lstDatabase.Size = new System.Drawing.Size(301, 229);
+			lstDatabase.TabIndex = 2;
+			lstDatabase.SelectedIndexChanged += lstDatabase_SelectedIndexChanged;
 			// 
 			// label1
 			// 
-			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(32, 81);
-			this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(67, 16);
-			this.label1.TabIndex = 3;
-			this.label1.Text = "Database";
+			label1.AutoSize = true;
+			label1.Location = new System.Drawing.Point(28, 76);
+			label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+			label1.Name = "label1";
+			label1.Size = new System.Drawing.Size(55, 15);
+			label1.TabIndex = 3;
+			label1.Text = "Database";
 			// 
 			// label2
 			// 
-			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(436, 81);
-			this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(48, 16);
-			this.label2.TabIndex = 5;
-			this.label2.Text = "Master";
+			label2.AutoSize = true;
+			label2.Location = new System.Drawing.Point(382, 76);
+			label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+			label2.Name = "label2";
+			label2.Size = new System.Drawing.Size(43, 15);
+			label2.TabIndex = 5;
+			label2.Text = "Master";
 			// 
 			// lstMaster
 			// 
-			this.lstMaster.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-			| System.Windows.Forms.AnchorStyles.Left)
-			| System.Windows.Forms.AnchorStyles.Right)));
-			this.lstMaster.FormattingEnabled = true;
-			this.lstMaster.HorizontalScrollbar = true;
-			this.lstMaster.ItemHeight = 16;
-			this.lstMaster.Location = new System.Drawing.Point(436, 105);
-			this.lstMaster.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-			this.lstMaster.Name = "lstMaster";
-			this.lstMaster.Size = new System.Drawing.Size(181, 244);
-			this.lstMaster.TabIndex = 4;
+			lstMaster.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+			lstMaster.FormattingEnabled = true;
+			lstMaster.HorizontalScrollbar = true;
+			lstMaster.ItemHeight = 15;
+			lstMaster.Location = new System.Drawing.Point(382, 98);
+			lstMaster.Margin = new System.Windows.Forms.Padding(4);
+			lstMaster.Name = "lstMaster";
+			lstMaster.Size = new System.Drawing.Size(159, 229);
+			lstMaster.TabIndex = 4;
 			// 
 			// btnAvvia
 			// 
-			this.btnAvvia.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.btnAvvia.Location = new System.Drawing.Point(975, 369);
-			this.btnAvvia.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-			this.btnAvvia.Name = "btnAvvia";
-			this.btnAvvia.Size = new System.Drawing.Size(100, 30);
-			this.btnAvvia.TabIndex = 6;
-			this.btnAvvia.Text = "Avvia";
-			this.btnAvvia.UseVisualStyleBackColor = true;
-			this.btnAvvia.Click += new System.EventHandler(this.btnAvvia_Click);
+			btnAvvia.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
+			btnAvvia.Location = new System.Drawing.Point(853, 346);
+			btnAvvia.Margin = new System.Windows.Forms.Padding(4);
+			btnAvvia.Name = "btnAvvia";
+			btnAvvia.Size = new System.Drawing.Size(88, 28);
+			btnAvvia.TabIndex = 6;
+			btnAvvia.Text = "Avvia";
+			btnAvvia.UseVisualStyleBackColor = true;
+			btnAvvia.Click += btnAvvia_Click;
 			// 
 			// lstCommonFolder
 			// 
-			this.lstCommonFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.lstCommonFolder.FormattingEnabled = true;
-			this.lstCommonFolder.HorizontalScrollbar = true;
-			this.lstCommonFolder.ItemHeight = 16;
-			this.lstCommonFolder.Location = new System.Drawing.Point(724, 105);
-			this.lstCommonFolder.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-			this.lstCommonFolder.Name = "lstCommonFolder";
-			this.lstCommonFolder.Size = new System.Drawing.Size(229, 292);
-			this.lstCommonFolder.TabIndex = 7;
+			lstCommonFolder.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
+			lstCommonFolder.FormattingEnabled = true;
+			lstCommonFolder.HorizontalScrollbar = true;
+			lstCommonFolder.ItemHeight = 15;
+			lstCommonFolder.Location = new System.Drawing.Point(634, 98);
+			lstCommonFolder.Margin = new System.Windows.Forms.Padding(4);
+			lstCommonFolder.Name = "lstCommonFolder";
+			lstCommonFolder.Size = new System.Drawing.Size(201, 274);
+			lstCommonFolder.TabIndex = 7;
 			// 
 			// label3
 			// 
-			this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.label3.AutoSize = true;
-			this.label3.Location = new System.Drawing.Point(720, 85);
-			this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(100, 16);
-			this.label3.TabIndex = 8;
-			this.label3.Text = "CommonFolder";
+			label3.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
+			label3.AutoSize = true;
+			label3.Location = new System.Drawing.Point(630, 80);
+			label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+			label3.Name = "label3";
+			label3.Size = new System.Drawing.Size(91, 15);
+			label3.TabIndex = 8;
+			label3.Text = "CommonFolder";
 			// 
 			// cbodataSource
 			// 
-			this.cbodataSource.FormattingEnabled = true;
-			this.cbodataSource.Location = new System.Drawing.Point(407, 27);
-			this.cbodataSource.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-			this.cbodataSource.Name = "cbodataSource";
-			this.cbodataSource.Size = new System.Drawing.Size(356, 24);
-			this.cbodataSource.TabIndex = 9;
+			cbodataSource.FormattingEnabled = true;
+			cbodataSource.Location = new System.Drawing.Point(356, 25);
+			cbodataSource.Margin = new System.Windows.Forms.Padding(4);
+			cbodataSource.Name = "cbodataSource";
+			cbodataSource.Size = new System.Drawing.Size(312, 23);
+			cbodataSource.TabIndex = 9;
 			// 
 			// btnAddMaster
 			// 
-			this.btnAddMaster.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.btnAddMaster.Location = new System.Drawing.Point(637, 105);
-			this.btnAddMaster.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-			this.btnAddMaster.Name = "btnAddMaster";
-			this.btnAddMaster.Size = new System.Drawing.Size(69, 97);
-			this.btnAddMaster.TabIndex = 10;
-			this.btnAddMaster.Text = "Add Master";
-			this.btnAddMaster.UseVisualStyleBackColor = true;
-			this.btnAddMaster.Click += new System.EventHandler(this.addMaster_Click);
+			btnAddMaster.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
+			btnAddMaster.Location = new System.Drawing.Point(557, 98);
+			btnAddMaster.Margin = new System.Windows.Forms.Padding(4);
+			btnAddMaster.Name = "btnAddMaster";
+			btnAddMaster.Size = new System.Drawing.Size(60, 91);
+			btnAddMaster.TabIndex = 10;
+			btnAddMaster.Text = "Add Master";
+			btnAddMaster.UseVisualStyleBackColor = true;
+			btnAddMaster.Click += addMaster_Click;
 			// 
 			// btnDebug
 			// 
-			this.btnDebug.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.btnDebug.Location = new System.Drawing.Point(873, 11);
-			this.btnDebug.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-			this.btnDebug.Name = "btnDebug";
-			this.btnDebug.Size = new System.Drawing.Size(201, 42);
-			this.btnDebug.TabIndex = 11;
-			this.btnDebug.Text = "Debug  = 1";
-			this.btnDebug.UseVisualStyleBackColor = true;
-			this.btnDebug.Click += new System.EventHandler(this.btnDebug_Click);
+			btnDebug.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
+			btnDebug.Location = new System.Drawing.Point(764, 10);
+			btnDebug.Margin = new System.Windows.Forms.Padding(4);
+			btnDebug.Name = "btnDebug";
+			btnDebug.Size = new System.Drawing.Size(176, 39);
+			btnDebug.TabIndex = 11;
+			btnDebug.Text = "Debug  = 1";
+			btnDebug.UseVisualStyleBackColor = true;
+			btnDebug.Click += btnDebug_Click;
 			// 
 			// btnDbUpdate
 			// 
-			this.btnDbUpdate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.btnDbUpdate.Location = new System.Drawing.Point(975, 105);
-			this.btnDbUpdate.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-			this.btnDbUpdate.Name = "btnDbUpdate";
-			this.btnDbUpdate.Size = new System.Drawing.Size(100, 30);
-			this.btnDbUpdate.TabIndex = 12;
-			this.btnDbUpdate.Text = "dbUpdate";
-			this.btnDbUpdate.UseVisualStyleBackColor = true;
-			this.btnDbUpdate.Click += new System.EventHandler(this.btnDbUpdate_Click);
+			btnDbUpdate.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
+			btnDbUpdate.Location = new System.Drawing.Point(853, 98);
+			btnDbUpdate.Margin = new System.Windows.Forms.Padding(4);
+			btnDbUpdate.Name = "btnDbUpdate";
+			btnDbUpdate.Size = new System.Drawing.Size(88, 28);
+			btnDbUpdate.TabIndex = 12;
+			btnDbUpdate.Text = "dbUpdate";
+			btnDbUpdate.UseVisualStyleBackColor = true;
+			btnDbUpdate.Click += btnDbUpdate_Click;
 			// 
 			// btnLeggiDbCombo
 			// 
-			this.btnLeggiDbCombo.Location = new System.Drawing.Point(765, 26);
-			this.btnLeggiDbCombo.Margin = new System.Windows.Forms.Padding(4);
-			this.btnLeggiDbCombo.Name = "btnLeggiDbCombo";
-			this.btnLeggiDbCombo.Size = new System.Drawing.Size(100, 28);
-			this.btnLeggiDbCombo.TabIndex = 13;
-			this.btnLeggiDbCombo.Text = "LeggiDb";
-			this.btnLeggiDbCombo.UseVisualStyleBackColor = true;
-			this.btnLeggiDbCombo.Click += new System.EventHandler(this.button2_Click);
+			btnLeggiDbCombo.Location = new System.Drawing.Point(669, 24);
+			btnLeggiDbCombo.Margin = new System.Windows.Forms.Padding(4);
+			btnLeggiDbCombo.Name = "btnLeggiDbCombo";
+			btnLeggiDbCombo.Size = new System.Drawing.Size(88, 26);
+			btnLeggiDbCombo.TabIndex = 13;
+			btnLeggiDbCombo.Text = "LeggiDb";
+			btnLeggiDbCombo.UseVisualStyleBackColor = true;
+			btnLeggiDbCombo.Click += button2_Click;
+			// 
+			// button2
+			// 
+			button2.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
+			button2.Location = new System.Drawing.Point(850, 134);
+			button2.Margin = new System.Windows.Forms.Padding(4);
+			button2.Name = "button2";
+			button2.Size = new System.Drawing.Size(88, 55);
+			button2.TabIndex = 14;
+			button2.Text = "Controlla file scompagnati";
+			button2.UseVisualStyleBackColor = true;
+			button2.Click += button2_Click_1;
 			// 
 			// frmMain
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
-			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(1087, 414);
-			this.Controls.Add(this.btnLeggiDbCombo);
-			this.Controls.Add(this.btnDbUpdate);
-			this.Controls.Add(this.btnDebug);
-			this.Controls.Add(this.btnAddMaster);
-			this.Controls.Add(this.cbodataSource);
-			this.Controls.Add(this.label3);
-			this.Controls.Add(this.lstCommonFolder);
-			this.Controls.Add(this.btnAvvia);
-			this.Controls.Add(this.label2);
-			this.Controls.Add(this.lstMaster);
-			this.Controls.Add(this.label1);
-			this.Controls.Add(this.lstDatabase);
-			this.Controls.Add(this.txtDataSource);
-			this.Controls.Add(this.button1);
-			this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-			this.Name = "frmMain";
-			this.Text = "Systore Launcher";
-			this.Load += new System.EventHandler(this.frmMain_Load);
-			this.ResumeLayout(false);
-			this.PerformLayout();
-
+			AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+			AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			ClientSize = new System.Drawing.Size(951, 388);
+			Controls.Add(button2);
+			Controls.Add(btnLeggiDbCombo);
+			Controls.Add(btnDbUpdate);
+			Controls.Add(btnDebug);
+			Controls.Add(btnAddMaster);
+			Controls.Add(cbodataSource);
+			Controls.Add(label3);
+			Controls.Add(lstCommonFolder);
+			Controls.Add(btnAvvia);
+			Controls.Add(label2);
+			Controls.Add(lstMaster);
+			Controls.Add(label1);
+			Controls.Add(lstDatabase);
+			Controls.Add(txtDataSource);
+			Controls.Add(button1);
+			Margin = new System.Windows.Forms.Padding(4);
+			Name = "frmMain";
+			Text = "Systore Launcher";
+			Load += frmMain_Load;
+			ResumeLayout(false);
+			PerformLayout();
 		}
 
 		#endregion
@@ -246,6 +256,7 @@
 		private System.Windows.Forms.Button btnDebug;
 		private System.Windows.Forms.Button btnDbUpdate;
 		private System.Windows.Forms.Button btnLeggiDbCombo;
+		private System.Windows.Forms.Button button2;
 	}
 }
 

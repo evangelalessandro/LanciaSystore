@@ -125,6 +125,11 @@ namespace LanciaSystore
 			cbodataSource.Text);
 
 		}
+
+		private void button2_Click_1(object sender, EventArgs e)
+		{
+			ManageNewSp.CreateNewFileSp(txtDataSource.Text, lstDatabase.Text, System.Reflection.Assembly.GetExecutingAssembly().Location);
+		}
 	}
 }
 

@@ -22,7 +22,7 @@ internal class fileCommonManager
 	public string DataSource { get; set; }
 	public string Database { get; set; }
 	private List<string> _FunzioniAbilitate { get; set; } = new List<string>();
-
+	private List<string> _DefaultButton = new List<string>();
 	public fileCommonManager(string datasource, string database, string directoryCommon)
 	{
 		DataSource = datasource;
@@ -31,6 +31,13 @@ internal class fileCommonManager
 
 		DirectoryCommon = directoryCommon;
 		leggiFunzioniAbilitate();
+
+
+		_DefaultButton.Add("BarBtnPredFilters");
+		_DefaultButton.Add("BarBtnPredGroups");
+		_DefaultButton.Add("BarBtnExit");
+		_DefaultButton.Add("BarBtnRefresh");
+		_DefaultButton.Add("BarBtnConferma");
 	}
 
 	private void leggiFunzioniAbilitate()
@@ -88,7 +95,14 @@ internal class fileCommonManager
 				{
 					if (item.CommonFile.Length > 0)
 					{
-						await ReadEnviroment(item, page, group, item);
+						await ReadEnviroment(item, page, group);
+					}
+					foreach (var itemSub in item.Items)
+					{
+						if (itemSub.CommonFile.Length > 0)
+						{
+							await ReadEnviroment(itemSub, page, group);
+						}
 					}
 
 				}
@@ -105,39 +119,36 @@ internal class fileCommonManager
 			return _ordine;
 		}
 	}
-	private async Task<int> ReadEnviroment(RibbonLinkItem item, RibbonLinkPage page, RibbonLinkGroup group, RibbonLinkItem item1)
+	private async Task<int> ReadEnviroment(RibbonLinkItem item, RibbonLinkPage page, RibbonLinkGroup group)
 	{
 		var itemsCommon = await ReadRibbon(item.CommonFile);
 		using TestConnessione test = new TestConnessione(DataSource);
 		if (test.Connessione.State == System.Data.ConnectionState.Closed)
 			await test.Connessione.OpenAsync();
 
-		var list = new List<string>();
-		list.Add("BarBtnPredFilters");
-		list.Add("BarBtnPredGroups");
-		list.Add("BarBtnExit");
-		list.Add("BarBtnRefresh");
-		list.Add("BarBtnConferma");
 
-		using var sqlcomm = new SqlCommand("use " + Database + " ; Exec ws_L2_CUSTOM_IMPORT_FUNZIONI @pPagina,@pGruppo, @pAmbiente,@pGruppoAmbiente,@pFunzione,@pOrdine ", test.Connessione);
 
+		using var sqlcomm = new SqlCommand("use " + Database + " ; Exec ws_L2_CUSTOM_IMPORT_FUNZIONI @pPagina,@pGruppo, @pAmbiente,@pGruppoAmbiente,@pFunzione,@pOrdine, @pAbi ", test.Connessione);
+		bool abi = true;
 		sqlcomm.CommandType = System.Data.CommandType.Text;
-		foreach (var groupAmbiente in itemsCommon.Pages.SelectMany(a => a.Groups).Where(a => CheckFunction(a)))
+		foreach (var groupAmbiente in itemsCommon.Pages.SelectMany(a => a.Groups))
 		{
 
-			foreach (var itemFunz in groupAmbiente.Items.Where(a => !list.Contains(a.Name)
-
-					&& CheckFunction(a)))
+			foreach (var itemFunz in groupAmbiente.Items.Where(a => !_DefaultButton.Contains(a.Name)))
 			{
 
 				try
 				{
+					abi = CheckFunction(itemFunz) && CheckFunction(groupAmbiente);
+
 					var glob = _listGlobal.Find(a => a.Name == itemFunz.Name);
 
 					var funzName = itemFunz.Text;
 					if (glob != null)
 					{
 						funzName = glob.Text;
+						if (!CheckFunction(glob))
+							abi = false;
 					}
 					sqlcomm.Parameters.Clear();
 
@@ -147,10 +158,12 @@ internal class fileCommonManager
 
 							new SqlParameter("@pPagina", page.Text),
 							new SqlParameter("@pGruppo", group.Text!=null?group.Text:""),
-							new SqlParameter("@pAmbiente", item1.Text),
+							new SqlParameter("@pAmbiente", item.Text),
 							new SqlParameter("@pGruppoAmbiente",  groupAmbiente.Text!=null?groupAmbiente.Text:""),
 							new SqlParameter("@pFunzione", funzName),
-							new SqlParameter("@pOrdine", GetNextOrdine)
+							new SqlParameter("@pOrdine", GetNextOrdine),
+							new SqlParameter("@pAbi",abi )
+
 						};
 
 					sqlcomm.Parameters.AddRange(parameters);
@@ -216,6 +229,10 @@ internal class fileCommonManager
 				if (itemNode.SelectSingleNode("ActionClick/FormParam/InstanceFileName") != null)
 					item.Link = itemNode.SelectSingleNode("ActionClick/FormParam/InstanceFileName").Attributes["value"].Value;
 
+				if (item.Text == "Annulla Split Riga")
+				{
+
+				}
 
 				if (item.Link == null)
 				{
@@ -223,6 +240,7 @@ internal class fileCommonManager
 				}
 				_listGlobal.Add(item);
 				CheckAccessLevel(nameNode, item);
+				CheckAccessLevel(itemNode, item);
 
 			}
 		}
@@ -277,11 +295,15 @@ internal class fileCommonManager
 					var txt = groupNode.SelectSingleNode("Text");
 					if (txt != null && txt.Attributes["value"] != null)
 					{
-						group.Text = groupNode.SelectSingleNode("Text").Attributes["value"].Value;
+						group.Text = txt.Attributes["value"].Value;
 					}
 					else
 					{
-
+						txt = groupNode.SelectSingleNode("Name");
+						if (txt != null && txt.Attributes["value"] != null)
+						{
+							group.Text = txt.Attributes["value"].Value;
+						}
 					}
 					CheckAccessLevel(groupNode, group);
 
@@ -500,6 +522,7 @@ internal class fileCommonManager
 	{
 		public List<RibbonLinkGroup> Groups { get; set; } = new();
 
+
 	}
 
 	public class Root
@@ -517,5 +540,15 @@ internal class fileCommonManager
 	{
 		public string Name { get; set; }
 		public string Text { get; set; }
+
+		public override string ToString()
+		{
+			if (Text.Length > 0)
+			{
+				return Text;
+			}
+			return Name;
+
+		}
 	}
 }

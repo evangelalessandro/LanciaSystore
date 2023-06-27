@@ -47,6 +47,7 @@ namespace LanciaSystore
 			txtDirectory.Text = Manager.Directory;
 
 			txtDirectory.TextChanged += TxtDirectory_TextChanged;
+			Manager.Directory = txtDirectory.Text;
 
 		}
 
@@ -101,7 +102,7 @@ namespace LanciaSystore
 
 		private void btnAvvia_Click(object sender, EventArgs e)
 		{
-			var exe = new Exe_SystemLogisticsApp4();
+			var exe = new Exe_SystemLogisticsApp4(Manager.Directory);
 			exe.StrartProc(txtDataSource.Text, lstMaster.Text, lstCommonFolder.Text, lstDatabase.Text, lstDatabase.Text);
 
 

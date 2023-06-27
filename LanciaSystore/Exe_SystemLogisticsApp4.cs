@@ -8,14 +8,16 @@ namespace LanciaSystore
 	{
 		public static string NameFile = "SystemLogisticsApp4.exe";
 		private System.IO.FileInfo _fileExe;
-		public Exe_SystemLogisticsApp4()
+		private string _directory;
+		public Exe_SystemLogisticsApp4(string directory)
 		{
+			_directory = directory;
 			ExistsExe();
 		}
 
 		public bool ExistsExe()
 		{
-			_fileExe = new System.IO.DirectoryInfo(Environment.CurrentDirectory).EnumerateFiles(NameFile).FirstOrDefault();
+			_fileExe = new System.IO.DirectoryInfo(_directory).EnumerateFiles(NameFile).FirstOrDefault();
 			if (_fileExe == null)
 				return false;
 			return true;
@@ -39,6 +41,7 @@ namespace LanciaSystore
 			parameter = parameter.Replace("{PLANTNAME}", plantName);
 			parameter = parameter.Replace("{DB}", database);
 
+			Environment.CurrentDirectory = _directory;
 
 			var proc = new System.Diagnostics.Process();
 			proc.StartInfo.FileName = _fileExe.FullName;

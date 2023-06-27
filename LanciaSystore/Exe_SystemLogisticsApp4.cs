@@ -31,7 +31,7 @@ namespace LanciaSystore
 			}
 			string parameter = "";
 			parameter = "PathFilesCommon={Common};DataSource={ServerSql};" +
-				"InitialCatalog={DB};Name={MASTER};PlantName={PLANTNAME};USER=SYSTEM";
+				"InitialCatalog={DB};Name={MASTER};PlantName={PLANTNAME};USER=SYSTEM;";
 
 			parameter = parameter.Replace("{Common}", CommonFolder);
 			parameter = parameter.Replace("{ServerSql}", sqlserverInstance);

@@ -1,0 +1,521 @@
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.IO;
+using System.Linq;
+using System.Reflection.Metadata;
+using System.Runtime.CompilerServices;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.Xml;
+using System.Xml.Serialization;
+using static System.Formats.Asn1.AsnWriter;
+
+namespace LanciaSystore.Data;
+
+internal class fileCommonManager
+{
+	public static string DirectoryCommon { get; set; }
+	public static List<string> FileCommonList { get; set; } = new List<string>();
+	public string DataSource { get; set; }
+	public string Database { get; set; }
+	private List<string> _FunzioniAbilitate { get; set; } = new List<string>();
+
+	public fileCommonManager(string datasource, string database, string directoryCommon)
+	{
+		DataSource = datasource;
+		Database = database;
+
+
+		DirectoryCommon = directoryCommon;
+		leggiFunzioniAbilitate();
+	}
+
+	private void leggiFunzioniAbilitate()
+	{
+		using TestConnessione test = new TestConnessione(DataSource);
+		if (test.Connessione.State == System.Data.ConnectionState.Closed)
+			test.Connessione.Open();
+
+
+		using var sqlcomm = new SqlCommand("use " + Database + " ; select fun_funzion from cfg_funzion where fun_abi=1 ", test.Connessione);
+
+		sqlcomm.CommandType = System.Data.CommandType.Text;
+		using var sqlReader = sqlcomm.ExecuteReader();
+		while (sqlReader.Read())
+		{
+			_FunzioniAbilitate.Add(sqlReader[0].ToString());
+		}
+
+
+	}
+
+	public async Task<int> ManageCommonFile()
+	{
+		FileCommonList.Clear();
+		_listGlobal.Clear();
+
+		foreach (var file in Directory.GetFiles(DirectoryCommon, "*.xml"))
+		{
+			FileCommonList.Add(file);
+		}
+
+
+		var list = new List<string>();
+		var globalButton = "_Core.App.GlobalButton.xml";
+		await ReadGlobalButton(Directory.GetFiles(DirectoryCommon, globalButton).First());
+
+		list.AddRange(Directory.GetFiles(DirectoryCommon, "_Core.App.Ribbon.xml"));
+		var ribbon = list.First();
+		var ribbonData = await ReadRibbon(ribbon);
+
+
+		await ReadAmbiente(ribbonData);
+
+
+		return 0;
+	}
+
+	private async Task<int> ReadAmbiente(Root ribbonData)
+	{
+		foreach (var page in ribbonData.Pages.Where(a => CheckFunction(a)))
+		{
+			foreach (var group in page.Groups.Where(a => CheckFunction(a)))
+			{
+				foreach (var item in group.Items.Where(a => CheckFunction(a)))
+				{
+					if (item.CommonFile.Length > 0)
+					{
+						await ReadEnviroment(item, page, group, item);
+					}
+
+				}
+			}
+		}
+		return 0;
+	}
+	int _ordine = 1;
+	private int GetNextOrdine
+	{
+		get
+		{
+			_ordine++;
+			return _ordine;
+		}
+	}
+	private async Task<int> ReadEnviroment(RibbonLinkItem item, RibbonLinkPage page, RibbonLinkGroup group, RibbonLinkItem item1)
+	{
+		var itemsCommon = await ReadRibbon(item.CommonFile);
+		using TestConnessione test = new TestConnessione(DataSource);
+		if (test.Connessione.State == System.Data.ConnectionState.Closed)
+			await test.Connessione.OpenAsync();
+
+		var list = new List<string>();
+		list.Add("BarBtnPredFilters");
+		list.Add("BarBtnPredGroups");
+		list.Add("BarBtnExit");
+		list.Add("BarBtnRefresh");
+		list.Add("BarBtnConferma");
+
+		using var sqlcomm = new SqlCommand("use " + Database + " ; Exec ws_L2_CUSTOM_IMPORT_FUNZIONI @pPagina,@pGruppo, @pAmbiente,@pGruppoAmbiente,@pFunzione,@pOrdine ", test.Connessione);
+
+		sqlcomm.CommandType = System.Data.CommandType.Text;
+		foreach (var groupAmbiente in itemsCommon.Pages.SelectMany(a => a.Groups).Where(a => CheckFunction(a)))
+		{
+
+			foreach (var itemFunz in groupAmbiente.Items.Where(a => !list.Contains(a.Name)
+
+					&& CheckFunction(a)))
+			{
+
+				try
+				{
+					var glob = _listGlobal.Find(a => a.Name == itemFunz.Name);
+
+					var funzName = itemFunz.Text;
+					if (glob != null)
+					{
+						funzName = glob.Text;
+					}
+					sqlcomm.Parameters.Clear();
+
+
+					var parameters = new SqlParameter[]
+						{
+
+							new SqlParameter("@pPagina", page.Text),
+							new SqlParameter("@pGruppo", group.Text!=null?group.Text:""),
+							new SqlParameter("@pAmbiente", item1.Text),
+							new SqlParameter("@pGruppoAmbiente",  groupAmbiente.Text!=null?groupAmbiente.Text:""),
+							new SqlParameter("@pFunzione", funzName),
+							new SqlParameter("@pOrdine", GetNextOrdine)
+						};
+
+					sqlcomm.Parameters.AddRange(parameters);
+					await sqlcomm.ExecuteNonQueryAsync();
+
+				}
+				catch (Exception ex)
+				{
+
+				}
+
+			}
+		}
+		return 0;
+	}
+	private bool CheckFunction(AccessLevelNameText item)
+	{
+		return (item.AppFunctions == null || _FunzioniAbilitate.Contains(item.AppFunctions)) && item.Visility != "AlwaysHide"
+
+			&& item.UserRole != ",SYSADM,";
+	}
+
+	static List<RibbonGlobalLinkItem> _listGlobal = new List<RibbonGlobalLinkItem>();
+	private static async Task<int> ReadGlobalButton(string globalButton)
+	{
+		try
+		{
+
+			_listGlobal.Clear();
+
+			XmlDocument xmlDoc = new XmlDocument();
+			xmlDoc.Load(globalButton);
+
+
+			//}
+			// Ottieni il nodo radice
+			XmlNode rootElement = xmlDoc.DocumentElement;
+
+			// Deserializza il contenuto XML nelle classi
+			Root root = new Root();
+
+			var ItemsLink = rootElement.SelectNodes("Buttons/i-i").Item(0).ChildNodes;
+
+
+
+			for (int k = 0; k < ItemsLink.Count; k++)
+			{
+				XmlNode itemNode = ItemsLink[k];
+				RibbonGlobalLinkItem item = new RibbonGlobalLinkItem();
+				var nameNode = itemNode.SelectSingleNode("Name");
+
+				item.Name = nameNode.Attributes["value"].Value;
+				if (itemNode.SelectSingleNode("Text") != null && itemNode.SelectSingleNode("Text").Attributes["value"] != null)
+					item.Text = itemNode.SelectSingleNode("Text").Attributes["value"].Value;
+				else if (itemNode.SelectSingleNode("FullName") != null)
+					item.Text = itemNode.SelectSingleNode("FullName").Attributes["value"].Value;
+				else
+				{
+
+				}
+
+
+				if (itemNode.SelectSingleNode("ActionClick/FormParam/InstanceFileName") != null)
+					item.Link = itemNode.SelectSingleNode("ActionClick/FormParam/InstanceFileName").Attributes["value"].Value;
+
+
+				if (item.Link == null)
+				{
+
+				}
+				_listGlobal.Add(item);
+				CheckAccessLevel(nameNode, item);
+
+			}
+		}
+		catch (Exception ex)
+		{
+
+
+		}
+		return 0;
+	}
+
+	private static async Task<Root> ReadRibbon(string file)
+	{
+		// Deserializza il contenuto XML nelle classi
+		Root root = new Root();
+		try
+		{
+
+
+			XmlDocument xmlDoc = new XmlDocument();
+			xmlDoc.Load(file);
+
+			// Ottieni il nodo radice
+			XmlNode rootElement = xmlDoc.DocumentElement;
+
+
+
+			var ItemsLink = rootElement.SelectNodes("Ribbon/Items/i-i").Item(0).ChildNodes;
+
+			var pageNodes = (rootElement.SelectNodes("Ribbon/RootLink/Pages/i-i")).Item(0).ChildNodes;
+
+
+
+
+			for (int i = 0; i < pageNodes.Count; i++)
+			{
+				XmlNode pageNode = pageNodes[i];
+				RibbonLinkPage page = new RibbonLinkPage();
+				root.Pages.Add(page);
+				page.Text = pageNode.SelectSingleNode("Text").Attributes["value"].Value;
+
+				CheckAccessLevel(pageNode, page);
+
+				var groupNodes = pageNode.SelectNodes("Groups/i-i").Item(0).ChildNodes;
+
+
+				for (int j = 0; j < groupNodes.Count; j++)
+				{
+					XmlNode groupNode = groupNodes[j];
+					RibbonLinkGroup group = new RibbonLinkGroup();
+					page.Groups.Add(group);
+					var txt = groupNode.SelectSingleNode("Text");
+					if (txt != null && txt.Attributes["value"] != null)
+					{
+						group.Text = groupNode.SelectSingleNode("Text").Attributes["value"].Value;
+					}
+					else
+					{
+
+					}
+					CheckAccessLevel(groupNode, group);
+
+					var itemNodes = groupNode.SelectNodes("ItemLinks/i-i").Item(0);
+					if (itemNodes != null)
+					{
+						var itemNodesChildren = groupNode.SelectNodes("ItemLinks/i-i").Item(0).ChildNodes;
+
+
+						for (int k = 0; k < itemNodesChildren.Count; k++)
+						{
+							XmlNode itemNode = itemNodesChildren[k];
+							RibbonLinkItem item = GetItem(ItemsLink, itemNode);
+
+							group.Items.Add(item);
+						}
+					}
+
+
+				}
+
+			}
+		}
+		catch (Exception ex)
+		{
+
+			MessageBox.Show("Errore nella lettura della ribbon principale", "Errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
+		}
+		return root;
+	}
+
+	private static RibbonLinkItem GetItem(XmlNodeList ItemsLink, XmlNode itemNode)
+	{
+		RibbonLinkItem item = new RibbonLinkItem();
+		var nameNode = itemNode.SelectSingleNode("Name");
+
+		item.Name = nameNode.Attributes["value"].Value;
+		XmlNode itemLinkNode = null;
+		foreach (XmlNode itemLinkC in ItemsLink)
+		{
+			if (itemLinkC.SelectNodes("Name").Item(0).Attributes["value"].Value == item.Name)
+			{
+				itemLinkNode = itemLinkC;
+
+				if (itemLinkC.SelectNodes("Text") != null && itemLinkC.SelectNodes("Text").Item(0) != null)
+				{
+					var txt = itemLinkC.SelectNodes("Text").Item(0).Attributes["value"];
+
+					if (txt != null)
+					{
+						item.Text = txt.Value;
+					}
+				}
+				if (itemLinkC.SelectSingleNode("ItemLinks/i-i") != null)
+				{
+					foreach (XmlNode itemSub in itemLinkC.SelectSingleNode("ItemLinks/i-i").ChildNodes)
+					{
+						item.Items.Add(GetItem(ItemsLink, itemSub));
+					}
+				}
+				var listG = _listGlobal.Where(a => a.Name == item.Name).FirstOrDefault();
+				if (listG != null)
+				{
+					item.Link = listG.Link;
+
+					item.Text = listG.Text;
+				}
+				else if (itemLinkC.SelectSingleNode("ActionClick/FormParam/InstanceFileName") != null)
+					item.Link = itemLinkC.SelectSingleNode("ActionClick/FormParam/InstanceFileName").Attributes["value"].Value;
+				else if (item.Name.StartsWith("L2Base", StringComparison.InvariantCultureIgnoreCase))
+				{
+					var actClick = itemLinkC.SelectSingleNode("ActionClick/FormParam");
+					if (actClick != null && actClick.OuterXml.Contains("TableToEdit value="))
+					{
+						item.Link = actClick.OuterXml.Split("TableToEdit value=").Last();
+						item.Link = "_CORE.FrmEditTable." + item.Link.Split("\"").ToList()[1] + ".xml";
+						//_CORE.FrmEditTable.BCKUP_UDC.xml
+					}
+					else if (actClick != null && actClick.OuterXml.Contains("type=\"[Sl]"))
+					{
+						item.Link = actClick.OuterXml.Split("type=\"[Sl]").Last();
+						item.Link = item.Link.Split("Args").First().Split(".").Last().Replace("Args", "");
+					}
+					else
+					{
+						var content = item.Name.Split(".").Last();
+						item.Link = content;// "_L2base.Frm{0}.xml".Replace("{0}", content);
+					}
+
+				}
+				else
+				{
+
+
+				}
+				break;
+			}
+
+		}
+
+		CheckAccessLevel(itemNode, item);
+		CheckAccessLevel(itemLinkNode, item);
+
+
+		if (item.Visility == "AlwaysHide")
+		{
+
+		}
+		else
+		if (item.Link != null)
+		{
+			findCommonFile(item);
+		}
+		return item;
+	}
+
+	private static void findCommonFile(RibbonLinkItem item)
+	{
+		if (CheckCondition(item, "_L2base.Frm{0}.xml".Replace("{0}", item.Link)))
+		{ return; }
+		if (CheckCondition(item, item.Link))
+		{ return; }
+
+		if (item.Name == "L2BASE.EWM")
+		{
+			if (CheckCondition(item, "_Slsystoreewm.FrmSystoreEwmCfg.xml"))
+				return;
+		}
+		if (CheckCondition(item, "{0}.xml".Replace("{0}", item.Link)))
+			return;
+
+		if (CheckCondition(item, "{0}.xml".Replace("{0}", item.Text.Replace(" ", ""))))
+			return;
+
+
+		if (CheckCondition(item, "_L2base.FrmGridBaseL2.{0}.xml".Replace("{0}", item.Text.Replace(" ", ""))))
+			return;
+
+
+		if (CheckCondition(item, "_L2base.Frm{0}.xml".Replace("{0}", item.Text.Replace(" ", ""))))
+			return;
+
+
+
+		if (item.CommonFile == "")
+		{
+
+
+		}
+
+	}
+
+	private static bool CheckCondition(RibbonLinkItem item, string endWith)
+	{
+		var items = FileCommonList.Where(a => a.EndsWith(endWith, StringComparison.InvariantCultureIgnoreCase)).ToList();
+		if (items.Count == 1)
+		{
+			item.CommonFile = items.FirstOrDefault();
+			return true;
+		}
+		return false;
+	}
+
+	private static async void CheckAccessLevel(XmlNode itemNode, AccessLevel item)
+	{
+
+		XmlNode checkResult = itemNode.SelectSingleNode("AccessLevel/CheckResultMode");
+		if (checkResult != null)
+		{
+			item.Visility = checkResult.Attributes["value"].Value;
+		}
+		checkResult = itemNode.SelectSingleNode("AccessLevel/UserRoles");
+		if (checkResult != null)
+		{
+			item.UserRole = checkResult.Attributes["value"].Value;
+		}
+		checkResult = itemNode.SelectSingleNode("AccessLevel/AppFunctions");
+		if (checkResult != null)
+		{
+			item.AppFunctions = checkResult.Attributes["value"].Value;
+		}
+
+
+	}
+
+	public class RibbonGlobalLinkItem : AccessLevelNameText
+	{
+		public string Link { get; set; }
+	}
+	public class RibbonLinkItem : AccessLevelNameText
+	{
+		public string Link { get; set; }
+		public string CommonFile { get; set; } = "";
+		public List<RibbonLinkItem> Items { get; set; } = new();
+		public EnviromentSystore Enviroment { get; set; }
+	}
+	public class EnviromentSystore
+	{
+		public string FileCommon { get; set; }
+		public List<FunzioniSystore> FunzioniSystore { get; set; }
+
+	}
+	public class FunzioniSystore : AccessLevelNameText
+	{
+
+
+	}
+
+	public class RibbonLinkGroup : AccessLevelNameText
+	{
+		public List<RibbonLinkItem> Items { get; set; } = new();
+
+	}
+
+	public class RibbonLinkPage : AccessLevelNameText
+	{
+		public List<RibbonLinkGroup> Groups { get; set; } = new();
+
+	}
+
+	public class Root
+	{
+		public List<RibbonLinkPage> Pages { get; set; } = new();
+	}
+
+	public class AccessLevel
+	{
+		public string Visility { get; internal set; }
+		public string UserRole { get; internal set; }
+		public string AppFunctions { get; internal set; }
+	}
+	public class AccessLevelNameText : AccessLevel
+	{
+		public string Name { get; set; }
+		public string Text { get; set; }
+	}
+}

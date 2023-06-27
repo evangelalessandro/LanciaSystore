@@ -3,7 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -41,6 +43,13 @@ internal class Manager
 
 		var settingManager = new SettingManager();
 		var settPrivate = settingManager.ReadSetting();
+
+
+		Directory = settPrivate.Directory;
+		if (string.IsNullOrEmpty(Directory))
+			Directory = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(
+			 GetExecutingDirectoryName()), "DATABASE");
+
 		SelectedDataSource = settPrivate.InstanzaSql;
 
 		var settPubl = settingManager.ReadPublicSetting();
@@ -79,6 +88,12 @@ internal class Manager
 			}
 		}
 	}
+	private static string GetExecutingDirectoryName()
+	{
+		var location = new Uri(Assembly.GetEntryAssembly().GetName().CodeBase);
+		return new FileInfo(location.AbsolutePath).Directory.FullName;
+	}
+	public string Directory { get; set; }
 	public void ReadDataInstanzaSql(string dataSourceName)
 	{
 		ListDatabase.Clear();
@@ -103,7 +118,7 @@ internal class Manager
 	public void LoadCommonFolder()
 	{
 		foreach (var item in
-		  System.IO.Directory.GetDirectories(Environment.CurrentDirectory, "*"
+		  System.IO.Directory.GetDirectories(Directory, "*"
 		  , System.IO.SearchOption.TopDirectoryOnly)
 
 		  .Select(a => new System.IO.DirectoryInfo(a)).Where(a => a.Attributes != System.IO.FileAttributes.Hidden
@@ -122,6 +137,12 @@ internal class Manager
 		  && !a.Name.Equals("_Patches", StringComparison.InvariantCultureIgnoreCase)
 		  && !a.Name.Equals("Setup", StringComparison.InvariantCultureIgnoreCase)
 		  && !a.Name.Contains("Simula")
+		  && !a.Name.Contains("CefSharp")
+		  && !a.Name.Contains("Directx", StringComparison.InvariantCultureIgnoreCase)
+		  && !a.Name.Contains("Common_mops", StringComparison.InvariantCultureIgnoreCase)
+		  && !a.Name.Contains("runtimes", StringComparison.InvariantCultureIgnoreCase)
+
+
 		  )
 		  .ToList()
 
@@ -190,8 +211,8 @@ internal class Manager
 		{
 
 			List<string> listDbFolder = new List<string>();
-			var path = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(
-			  System.Reflection.Assembly.GetExecutingAssembly().Location), "Database");
+			var path = System.IO.Path.Combine(
+			  Directory, "Database");
 			if (System.IO.Directory.Exists(path))
 			{
 				listDbFolder = System.IO.Directory.EnumerateDirectories(path, "WS*", System.IO.SearchOption.TopDirectoryOnly)

@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace LanciaSystore
 {
-	internal class TestConnessione
+	internal class TestConnessione : IDisposable
 	{
 		SqlConnection _connection;
 		string _dataSource;
@@ -157,6 +157,15 @@ namespace LanciaSystore
 						txtcomm
 						, Connessione);
 			command.ExecuteNonQuery();
+		}
+
+		public void Dispose()
+		{
+			if (_connection != null)
+			{
+				_connection.Dispose();
+				_connection = null;
+			}
 		}
 	}
 }

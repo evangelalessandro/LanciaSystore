@@ -5,7 +5,9 @@ using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace LanciaSystore
@@ -42,8 +44,16 @@ namespace LanciaSystore
 			//lstCommonFolder.DataBindings.Add("SelectedValue", Manager, "SelectedCommon");
 			//lstMaster.DataBindings.Add("SelectedValue", Manager, "SelectedMaster");
 
+			txtDirectory.Text = Manager.Directory;
+
+			txtDirectory.TextChanged += TxtDirectory_TextChanged;
+
 		}
 
+		private void TxtDirectory_TextChanged(object sender, EventArgs e)
+		{
+			Manager.Directory = txtDirectory.Text;
+		}
 
 		private void LstMaster_SelectedIndexChanged(object sender, EventArgs e)
 		{
@@ -67,6 +77,8 @@ namespace LanciaSystore
 				sett.Master = lstMaster.SelectedItem.ToString();
 			if (lstCommonFolder.SelectedIndex >= 0)
 				sett.CommonFolder = lstCommonFolder.SelectedItem.ToString();
+
+			sett.Directory = Manager.Directory;
 			settingManager.SaveSetting(sett);
 
 		}
@@ -126,9 +138,27 @@ namespace LanciaSystore
 
 		}
 
-		private void button2_Click_1(object sender, EventArgs e)
+		private async void button2_Click_1(object sender, EventArgs e)
 		{
-			ManageNewSp.CreateNewFileSp(txtDataSource.Text, lstDatabase.Text, System.Reflection.Assembly.GetExecutingAssembly().Location);
+			button2.Enabled = false;
+			await CheckUpdateAsync();
+		}
+		private async Task<bool> CheckUpdateAsync()
+		{
+			await ManageNewSp.CreateNewFileSp(txtDataSource.Text, lstDatabase.Text, Manager.Directory);
+			button2.Enabled = true;
+
+			return true;
+		}
+
+		private async void button3_Click(object sender, EventArgs e)
+		{
+			button3.Enabled = false;
+			var fileCom = new fileCommonManager(txtDataSource.Text, lstDatabase.Text, Manager.Directory + @"\" + lstCommonFolder.Text);
+			await fileCom.ManageCommonFile();
+
+			button3.Enabled = true;
+
 		}
 	}
 }

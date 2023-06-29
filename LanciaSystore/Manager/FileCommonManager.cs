@@ -122,6 +122,8 @@ internal class FileCommonManager
 	private async Task<int> ReadEnviroment(RibbonLinkItem item, RibbonLinkPage page, RibbonLinkGroup group)
 	{
 		var itemsCommon = await ReadRibbon(item.CommonFile);
+		var commonRef = item.CommonFile.Split(@"\").Last();
+
 		using TestConnessione test = new TestConnessione(DataSource);
 		if (test.Connessione.State == System.Data.ConnectionState.Closed)
 			await test.Connessione.OpenAsync();
@@ -163,7 +165,7 @@ internal class FileCommonManager
 							new SqlParameter("@pFunzione", funzName),
 							new SqlParameter("@pOrdine", GetNextOrdine),
 							new SqlParameter("@pAbi",abi ),
-							new SqlParameter("@pCommonFile",itemFunz.CommonFile),
+							new SqlParameter("@pCommonFile",commonRef),
 							new SqlParameter("@pButtonName",itemFunz.Name),
 
 						};

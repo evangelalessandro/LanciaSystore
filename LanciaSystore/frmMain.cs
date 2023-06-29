@@ -1,12 +1,7 @@
-﻿using LanciaSystore.Data;
+﻿using LanciaSystore.Manager;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Data.SqlClient;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -14,7 +9,7 @@ namespace LanciaSystore
 {
 	public partial class frmMain : Form
 	{
-		internal Manager Manager { get; set; } = new Manager();
+		internal UIManager Manager { get; set; } = new();
 
 
 		public frmMain()
@@ -146,7 +141,7 @@ namespace LanciaSystore
 		}
 		private async Task<bool> CheckUpdateAsync()
 		{
-			await ManageNewSp.CreateNewFileSp(txtDataSource.Text, lstDatabase.Text, Manager.Directory);
+			await NewSpManager.CreateNewFileSp(txtDataSource.Text, lstDatabase.Text, Manager.Directory);
 			button2.Enabled = true;
 
 			return true;
@@ -155,7 +150,7 @@ namespace LanciaSystore
 		private async void button3_Click(object sender, EventArgs e)
 		{
 			button3.Enabled = false;
-			var fileCom = new fileCommonManager(txtDataSource.Text, lstDatabase.Text, Manager.Directory + @"\" + lstCommonFolder.Text);
+			var fileCom = new FileCommonManager(txtDataSource.Text, lstDatabase.Text, Manager.Directory + @"\" + lstCommonFolder.Text);
 			await fileCom.ManageCommonFile();
 
 			button3.Enabled = true;

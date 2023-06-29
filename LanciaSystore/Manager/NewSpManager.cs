@@ -18,9 +18,9 @@ using System.Security.Policy;
 using static System.Net.Mime.MediaTypeNames;
 using System.Text.RegularExpressions;
 
-namespace LanciaSystore.Data
+namespace LanciaSystore.Manager
 {
-	internal class ManageNewSp
+	internal class NewSpManager
 	{
 		private static List<SqlProcedureFunction> _LIST = new();
 		internal static async Task CreateNewFileSp(string datasource, string database, string folder)
@@ -65,7 +65,7 @@ namespace LanciaSystore.Data
 			{
 				_LIST.Add(new SqlProcedureFunction(item["SPECIFIC_NAME"].ToString(), item["ROUTINE_DEFINITION"].ToString(), item["routine_type"].ToString()));
 			}
-			folder = System.IO.Path.Combine(folder, "Database");
+			folder = Path.Combine(folder, "Database");
 			var folders = Directory.GetDirectories(folder, "WS*");
 
 			foreach (var folderDb in folders.Where(a => a.EndsWith(database)))
@@ -110,7 +110,7 @@ namespace LanciaSystore.Data
 			var listEmpty = await _LIST.Where(a => a.File == "").ToAsyncEnumerable().ToListAsync();
 			if (listEmpty.Count > 0)
 			{
-				var folderDest = System.IO.Path.Combine(folder, database, "CustomAle");
+				var folderDest = Path.Combine(folder, database, "CustomAle");
 				if (!Directory.Exists(folderDest))
 				{
 					Directory.CreateDirectory(folderDest);
@@ -119,7 +119,7 @@ namespace LanciaSystore.Data
 
 				foreach (var item in listEmpty)
 				{
-					File.WriteAllText(System.IO.Path.Combine(folderDest, "dbo." + item.Name + ".sql"), item.Content, new UTF8Encoding());
+					File.WriteAllText(Path.Combine(folderDest, "dbo." + item.Name + ".sql"), item.Content, new UTF8Encoding());
 				}
 				MessageBox.Show("Trovate  " + listEmpty.Count().ToString() + " sp, generati i nuovi file e messi in " + folderDest, "Info", MessageBoxButtons.OK, icon: MessageBoxIcon.Exclamation);
 			}
@@ -157,9 +157,9 @@ namespace LanciaSystore.Data
 
 		public SqlProcedureFunction(string name, string body, string type)
 		{
-			this.Name = name;
-			this.Content = body;
-			this.Type = type;
+			Name = name;
+			Content = body;
+			Type = type;
 		}
 
 		public string Name { get; set; } = "";

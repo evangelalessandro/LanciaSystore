@@ -10,10 +10,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace LanciaSystore.Data;
+namespace LanciaSystore.Manager;
 
 [AddINotifyPropertyChangedInterface]
-internal class Manager
+internal class UIManager
 {
 	TestConnessione _testConn;
 	public ObservableCollection<string> ListDataSource { get; set; } = new();
@@ -38,7 +38,7 @@ internal class Manager
 	public bool DbUpdateEnable { get; set; }
 	public string SelectedCommon { get; set; }
 
-	public Manager()
+	public UIManager()
 	{
 
 		var settingManager = new SettingManager();
@@ -47,7 +47,7 @@ internal class Manager
 
 		Directory = settPrivate.Directory;
 		if (string.IsNullOrEmpty(Directory))
-			Directory = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(
+			Directory = Path.Combine(Path.GetDirectoryName(
 			 GetExecutingDirectoryName()), "DATABASE");
 
 		SelectedDataSource = settPrivate.InstanzaSql;
@@ -119,10 +119,10 @@ internal class Manager
 	{
 		foreach (var item in
 		  System.IO.Directory.GetDirectories(Directory, "*"
-		  , System.IO.SearchOption.TopDirectoryOnly)
+		  , SearchOption.TopDirectoryOnly)
 
-		  .Select(a => new System.IO.DirectoryInfo(a)).Where(a => a.Attributes != System.IO.FileAttributes.Hidden
-		  && a.Attributes != System.IO.FileAttributes.Encrypted).ToList()
+		  .Select(a => new DirectoryInfo(a)).Where(a => a.Attributes != FileAttributes.Hidden
+		  && a.Attributes != FileAttributes.Encrypted).ToList()
 		  .Where(a => !a.Name.Contains("DevExpress_") && !a.Name.Contains("SLBin")
 		  && !a.Name.Contains("Multimedia")
 		  && !a.Name.StartsWith("SL", StringComparison.InvariantCultureIgnoreCase)
@@ -180,7 +180,7 @@ internal class Manager
 		try
 		{
 
-			if (string.IsNullOrEmpty(this.SelectedDb))
+			if (string.IsNullOrEmpty(SelectedDb))
 				return;
 
 			var selectedDb = SelectedDb;
@@ -211,13 +211,13 @@ internal class Manager
 		{
 
 			List<string> listDbFolder = new List<string>();
-			var path = System.IO.Path.Combine(
+			var path = Path.Combine(
 			  Directory, "Database");
 			if (System.IO.Directory.Exists(path))
 			{
-				listDbFolder = System.IO.Directory.EnumerateDirectories(path, "WS*", System.IO.SearchOption.TopDirectoryOnly)
+				listDbFolder = System.IO.Directory.EnumerateDirectories(path, "WS*", SearchOption.TopDirectoryOnly)
 
-				  .Select(a => new System.IO.DirectoryInfo(a).Name).ToList();
+				  .Select(a => new DirectoryInfo(a).Name).ToList();
 
 				listDbFolder.RemoveAll(a => a.EndsWith("_HISTORY", StringComparison.InvariantCultureIgnoreCase)
 				  ||
@@ -232,7 +232,7 @@ internal class Manager
 			}
 			var list = _testConn.InstanceData.DbList.Select(a => a.Database).ToList();
 			foreach (var item in list.Where(a =>
-			!listDbFolder.Any() || (listDbFolder.Any() && a.Contains(listDbFolder.FirstOrDefault()))).OrderBy(a => a))
+			!listDbFolder.Any() || listDbFolder.Any() && a.Contains(listDbFolder.FirstOrDefault())).OrderBy(a => a))
 			{
 				listDb.Add(item);
 			}
@@ -242,7 +242,7 @@ internal class Manager
 		}
 		finally
 		{
-			this.ListDatabase = new ObservableCollection<string>(listDb);
+			ListDatabase = new ObservableCollection<string>(listDb);
 		}
 	}
 }

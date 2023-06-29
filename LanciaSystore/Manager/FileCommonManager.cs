@@ -13,9 +13,9 @@ using System.Xml;
 using System.Xml.Serialization;
 using static System.Formats.Asn1.AsnWriter;
 
-namespace LanciaSystore.Data;
+namespace LanciaSystore.Manager;
 
-internal class fileCommonManager
+internal class FileCommonManager
 {
 	public static string DirectoryCommon { get; set; }
 	public static List<string> FileCommonList { get; set; } = new List<string>();
@@ -23,7 +23,7 @@ internal class fileCommonManager
 	public string Database { get; set; }
 	private List<string> _FunzioniAbilitate { get; set; } = new List<string>();
 	private List<string> _DefaultButton = new List<string>();
-	public fileCommonManager(string datasource, string database, string directoryCommon)
+	public FileCommonManager(string datasource, string database, string directoryCommon)
 	{
 		DataSource = datasource;
 		Database = database;
@@ -128,7 +128,7 @@ internal class fileCommonManager
 
 
 
-		using var sqlcomm = new SqlCommand("use " + Database + " ; Exec ws_L2_CUSTOM_IMPORT_FUNZIONI @pPagina,@pGruppo, @pAmbiente,@pGruppoAmbiente,@pFunzione,@pOrdine, @pAbi ", test.Connessione);
+		using var sqlcomm = new SqlCommand("use " + Database + " ; Exec ws_L2_CUSTOM_IMPORT_FUNZIONI @pPagina,@pGruppo, @pAmbiente,@pGruppoAmbiente,@pFunzione,@pOrdine, @pAbi, @pCommonFile ,@pButtonName ", test.Connessione);
 		bool abi = true;
 		sqlcomm.CommandType = System.Data.CommandType.Text;
 		foreach (var groupAmbiente in itemsCommon.Pages.SelectMany(a => a.Groups))
@@ -162,7 +162,9 @@ internal class fileCommonManager
 							new SqlParameter("@pGruppoAmbiente",  groupAmbiente.Text!=null?groupAmbiente.Text:""),
 							new SqlParameter("@pFunzione", funzName),
 							new SqlParameter("@pOrdine", GetNextOrdine),
-							new SqlParameter("@pAbi",abi )
+							new SqlParameter("@pAbi",abi ),
+							new SqlParameter("@pCommonFile",itemFunz.CommonFile),
+							new SqlParameter("@pButtonName",itemFunz.Name),
 
 						};
 
@@ -270,7 +272,7 @@ internal class fileCommonManager
 
 			var ItemsLink = rootElement.SelectNodes("Ribbon/Items/i-i").Item(0).ChildNodes;
 
-			var pageNodes = (rootElement.SelectNodes("Ribbon/RootLink/Pages/i-i")).Item(0).ChildNodes;
+			var pageNodes = rootElement.SelectNodes("Ribbon/RootLink/Pages/i-i").Item(0).ChildNodes;
 
 
 

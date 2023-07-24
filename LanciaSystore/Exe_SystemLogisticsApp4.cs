@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LanciaSystore.Manager;
+using System;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -23,8 +24,11 @@ namespace LanciaSystore
 			return true;
 
 		}
-
-		public void StrartProc(string sqlserverInstance, string MasterName, string CommonFolder, string plantName, string database)
+		public void StrartProc(UIManager manager)
+		{
+			StrartProc(manager.SelectedDataSource, manager.SelectedMaster, manager.SelectedCommon, manager.SelectedDb, manager.SelectedDb);
+		}
+		private void StrartProc(string sqlserverInstance, string MasterName, string CommonFolder, string plantName, string database)
 		{
 			if (!ExistsExe())
 			{

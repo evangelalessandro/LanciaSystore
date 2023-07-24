@@ -43,7 +43,7 @@ namespace LanciaSystore
 
 			txtDirectory.TextChanged += TxtDirectory_TextChanged;
 			Manager.Directory = txtDirectory.Text;
-
+			btnLeggiFileCommon.Enabled = false;
 		}
 
 		private void TxtDirectory_TextChanged(object sender, EventArgs e)
@@ -81,8 +81,7 @@ namespace LanciaSystore
 
 		private void btnConnect_Click(object sender, EventArgs e)
 		{
-			Manager.ReadDataInstanzaSql(
-			txtDataSource.Text);
+			Manager.ReadDataInstanzaSql(txtDataSource.Text);
 
 		}
 
@@ -98,13 +97,7 @@ namespace LanciaSystore
 		private void btnAvvia_Click(object sender, EventArgs e)
 		{
 			var exe = new Exe_SystemLogisticsApp4(Manager.Directory);
-			exe.StrartProc(txtDataSource.Text, lstMaster.Text, lstCommonFolder.Text, lstDatabase.Text, lstDatabase.Text);
-
-
-		}
-
-		private void frmMain_Load(object sender, EventArgs e)
-		{
+			exe.StrartProc(Manager);
 
 		}
 
@@ -124,36 +117,36 @@ namespace LanciaSystore
 		private void btnDbUpdate_Click(object sender, EventArgs e)
 		{
 			var exe = new Exe_dbupodate();
-			exe.StrartProc(txtDataSource.Text, lstDatabase.Text);
+			exe.StartProcecure(Manager);
 		}
 
-		private void button2_Click(object sender, EventArgs e)
+		private void btnLeggiDbCombo_Click(object sender, EventArgs e)
 		{
 			Manager.ReadDataInstanzaSql(
 			cbodataSource.Text);
 
 		}
 
-		private async void button2_Click_1(object sender, EventArgs e)
+		private async void btnControllaFileScompagnati_Click(object sender, EventArgs e)
 		{
-			button2.Enabled = false;
+			btnControllaFileScompagnati.Enabled = false;
 			await CheckUpdateAsync();
 		}
 		private async Task<bool> CheckUpdateAsync()
 		{
-			await NewSpManager.CreateNewFileSp(txtDataSource.Text, lstDatabase.Text, Manager.Directory);
-			button2.Enabled = true;
+			await NewSpManager.CreateNewFileSp(Manager.SelectedDataSource, lstDatabase.Text, Manager.Directory);
+			btnControllaFileScompagnati.Enabled = true;
 
 			return true;
 		}
 
-		private async void button3_Click(object sender, EventArgs e)
+		private async void btnLeggiFileCommon_Click(object sender, EventArgs e)
 		{
-			button3.Enabled = false;
-			var fileCom = new FileCommonManager(txtDataSource.Text, lstDatabase.Text, Manager.Directory + @"\" + lstCommonFolder.Text);
+			btnLeggiFileCommon.Enabled = false;
+			var fileCom = new FileCommonManager(Manager.SelectedDataSource, lstDatabase.Text, Manager.Directory + @"\" + lstCommonFolder.Text);
 			await fileCom.ManageCommonFile();
 
-			button3.Enabled = true;
+			btnLeggiFileCommon.Enabled = true;
 
 		}
 	}

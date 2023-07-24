@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
@@ -76,7 +78,7 @@ internal class FileCommonManager
 
 		list.AddRange(Directory.GetFiles(DirectoryCommon, "_Core.App.Ribbon.xml"));
 		var ribbon = list.First();
-		var ribbonData = await ReadRibbon(ribbon);
+		var ribbonData = await ReadRibbon(ribbon, true);
 
 
 		await ReadAmbiente(ribbonData);
@@ -121,7 +123,7 @@ internal class FileCommonManager
 	}
 	private async Task<int> ReadEnviroment(RibbonLinkItem item, RibbonLinkPage page, RibbonLinkGroup group)
 	{
-		var itemsCommon = await ReadRibbon(item.CommonFile);
+		var itemsCommon = await ReadRibbon(item.CommonFile, false);
 		var commonRef = item.CommonFile.Split(@"\").Last();
 
 		using TestConnessione test = new TestConnessione(DataSource);
@@ -130,7 +132,7 @@ internal class FileCommonManager
 
 
 
-		using var sqlcomm = new SqlCommand("use " + Database + " ; Exec ws_L2_CUSTOM_IMPORT_FUNZIONI @pPagina,@pGruppo, @pAmbiente,@pGruppoAmbiente,@pFunzione,@pOrdine, @pAbi, @pCommonFile ,@pButtonName ", test.Connessione);
+		using var sqlcomm = new SqlCommand("use " + Database + " ; Exec ws_L2_CUSTOM_IMPORT_FUNZIONI @pPagina,@pGruppo, @pAmbiente,@pGruppoAmbiente,@pFunzione,@pOrdine, @pAbi, @pCommonFile ,@pButtonName, @pGroupName ", test.Connessione);
 		bool abi = true;
 		sqlcomm.CommandType = System.Data.CommandType.Text;
 		foreach (var groupAmbiente in itemsCommon.Pages.SelectMany(a => a.Groups))
@@ -139,13 +141,13 @@ internal class FileCommonManager
 			foreach (var itemFunz in groupAmbiente.Items.Where(a => !_DefaultButton.Contains(a.Name)))
 			{
 
+				var funzName = itemFunz.Text;
 				try
 				{
 					abi = CheckFunction(itemFunz) && CheckFunction(groupAmbiente);
 
 					var glob = _listGlobal.Find(a => a.Name == itemFunz.Name);
 
-					var funzName = itemFunz.Text;
 					if (glob != null)
 					{
 						funzName = glob.Text;
@@ -154,7 +156,18 @@ internal class FileCommonManager
 					}
 					sqlcomm.Parameters.Clear();
 
-
+					if (itemFunz.Name.StartsWith("cb", StringComparison.OrdinalIgnoreCase))
+						continue;
+					if (itemFunz.Name.StartsWith("chk", StringComparison.OrdinalIgnoreCase))
+						continue;
+					if (itemFunz.Name.StartsWith("dt", StringComparison.OrdinalIgnoreCase))
+						continue;
+					if (itemFunz.Name.StartsWith("txt", StringComparison.OrdinalIgnoreCase))
+						continue;
+					if (itemFunz.Name.StartsWith("cmb", StringComparison.OrdinalIgnoreCase))
+						continue;
+					if (itemFunz.Name.StartsWith("hh", StringComparison.OrdinalIgnoreCase))
+						continue;
 					var parameters = new SqlParameter[]
 						{
 
@@ -167,6 +180,7 @@ internal class FileCommonManager
 							new SqlParameter("@pAbi",abi ),
 							new SqlParameter("@pCommonFile",commonRef),
 							new SqlParameter("@pButtonName",itemFunz.Name),
+							new SqlParameter("@pGroupName",groupAmbiente.Name),
 
 						};
 
@@ -256,7 +270,7 @@ internal class FileCommonManager
 		return 0;
 	}
 
-	private static async Task<Root> ReadRibbon(string file)
+	private async Task<Root> ReadRibbon(string file, bool assignRole)
 	{
 		// Deserializza il contenuto XML nelle classi
 		Root root = new Root();
@@ -301,15 +315,19 @@ internal class FileCommonManager
 					{
 						group.Text = txt.Attributes["value"].Value;
 					}
-					else
+
+					txt = groupNode.SelectSingleNode("Name");
+					if (txt != null && txt.Attributes["value"] != null)
 					{
-						txt = groupNode.SelectSingleNode("Name");
-						if (txt != null && txt.Attributes["value"] != null)
+						if (string.IsNullOrEmpty(group.Text))
 						{
 							group.Text = txt.Attributes["value"].Value;
 						}
+						group.Name = txt.Attributes["value"].Value;
 					}
+
 					CheckAccessLevel(groupNode, group);
+
 
 					var itemNodes = groupNode.SelectNodes("ItemLinks/i-i").Item(0);
 					if (itemNodes != null)
@@ -323,6 +341,12 @@ internal class FileCommonManager
 							RibbonLinkItem item = GetItem(ItemsLink, itemNode);
 
 							group.Items.Add(item);
+
+
+							if (assignRole)
+							{
+								AssignRole(page, group, item, file);
+							}
 						}
 					}
 
@@ -337,6 +361,95 @@ internal class FileCommonManager
 			MessageBox.Show("Errore nella lettura della ribbon principale", "Errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
 		}
 		return root;
+	}
+
+	private async void AssignRole(RibbonLinkPage page, RibbonLinkGroup group, RibbonLinkItem item, string file)
+	{
+		using TestConnessione test = new TestConnessione(DataSource);
+		if (test.Connessione.State == System.Data.ConnectionState.Closed)
+			await test.Connessione.OpenAsync();
+
+
+
+		using var sqlcomm = new SqlCommand("use " + Database + " ;   select FRY_RUOLO\r\nfrom DAT_RIBBON_SYSTORE \r\nwhere FRY_PAGINA=@pagina and FRY_GRUPPO=@gruppo and FRY_AMBIENTE=@ambiente ", test.Connessione);
+		bool abi = true;
+		sqlcomm.CommandType = System.Data.CommandType.Text;
+		sqlcomm.Parameters.AddRange(
+			new[] {
+			new SqlParameter("@pagina", page.Text),
+			new SqlParameter("@gruppo", group.Text),
+			new SqlParameter("@ambiente", item.Text) });
+
+		var ruolo = "";
+		var read = sqlcomm.ExecuteReader();
+		if (read != null)
+		{
+			while (read.Read())
+			{
+				ruolo = read.GetString(0);
+			}
+		};
+		await read.DisposeAsync();
+		if (ruolo == "")
+		{
+			return;
+		}
+
+
+		var txt = File.ReadAllLines(file);
+		var txtIndex = new List<Tuple<string, int>>();
+		var index = 0;
+		foreach (var itemNode in txt)
+		{
+			index += 10;
+			txtIndex.Add(new Tuple<string, int>(itemNode, index));
+
+		}
+		//
+		///<AccessLevel>
+		//< UserRoles value = ",SYSADM," type = "[S]" />
+		//</ AccessLevel >
+		bool write = false;
+		var listItem = txtIndex.Where(a => a.Item1.Contains("<Name value=\"" + item.Name + "\"")).OrderByDescending(a => a.Item2).FirstOrDefault();
+		if (listItem != null)
+		{
+			var listBlocchi = txtIndex.Where(a => a.Item1.Contains(@"<i-i type=""[ACore]Core.Ribbon.RibbonItemButton"">")).OrderBy(a => a.Item2).ToList();
+			var inizioBlocco = listBlocchi.Where(a => a.Item2 < listItem.Item2).OrderByDescending(a => a.Item2).FirstOrDefault();
+
+			var fine = txtIndex.Where(a => a.Item2 > listItem.Item2).Where(a => a.Item1.Contains("</i-i>")).OrderBy(a => a.Item2).FirstOrDefault();
+
+			var access = txtIndex.Where(a => a.Item2 > inizioBlocco.Item2 && a.Item2 < fine.Item2 && a.Item1.Contains("AccessLevel")).FirstOrDefault();
+
+
+			if (access == null)
+			{
+				txtIndex.Add(new Tuple<string, int>("          <AccessLevel>", listItem.Item2 - 5));
+				txtIndex.Add(new Tuple<string, int>("          <UserRoles value = \"," + ruolo + ",\" type = \"[S]\" />", listItem.Item2 - 4));
+				txtIndex.Add(new Tuple<string, int>("          </AccessLevel>", listItem.Item2 - 3));
+				write = true;
+			}
+			else
+			{
+				var userRole = txtIndex.Where(a => a.Item2 > inizioBlocco.Item2 && a.Item2 < fine.Item2 && a.Item1.Contains("UserRoles")).ToList();
+				if (userRole.Count == 0)
+				{
+
+					txtIndex.Add(new Tuple<string, int>("          <UserRoles value = \"," + ruolo + ",\" type = \"[S]\" />", access.Item2 + 1));
+					write = true;
+				}
+				else
+				{
+					write = true;
+				}
+			}
+
+
+
+
+		}
+		if (write)
+			File.WriteAllLines(file, txtIndex.OrderBy(a => a.Item2).Select(a => a.Item1));
+
 	}
 
 	private static RibbonLinkItem GetItem(XmlNodeList ItemsLink, XmlNode itemNode)

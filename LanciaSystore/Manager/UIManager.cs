@@ -114,6 +114,8 @@ internal class UIManager
 			settingManager.SaveSetting(publicSett);
 		}
 
+		SelectedDataSource = dataSourceName;
+
 	}
 	public void LoadCommonFolder()
 	{

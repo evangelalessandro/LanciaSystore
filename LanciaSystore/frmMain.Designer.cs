@@ -42,10 +42,10 @@
 			btnDebug = new System.Windows.Forms.Button();
 			btnDbUpdate = new System.Windows.Forms.Button();
 			btnLeggiDbCombo = new System.Windows.Forms.Button();
-			button2 = new System.Windows.Forms.Button();
+			btnControllaFileScompagnati = new System.Windows.Forms.Button();
 			txtDirectory = new System.Windows.Forms.TextBox();
 			label4 = new System.Windows.Forms.Label();
-			button3 = new System.Windows.Forms.Button();
+			btnLeggiFileCommon = new System.Windows.Forms.Button();
 			SuspendLayout();
 			// 
 			// button1
@@ -201,19 +201,19 @@
 			btnLeggiDbCombo.TabIndex = 13;
 			btnLeggiDbCombo.Text = "LeggiDb";
 			btnLeggiDbCombo.UseVisualStyleBackColor = true;
-			btnLeggiDbCombo.Click += button2_Click;
+			btnLeggiDbCombo.Click += btnLeggiDbCombo_Click;
 			// 
 			// button2
 			// 
-			button2.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
-			button2.Location = new System.Drawing.Point(971, 179);
-			button2.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
-			button2.Name = "button2";
-			button2.Size = new System.Drawing.Size(101, 73);
-			button2.TabIndex = 14;
-			button2.Text = "Controlla file scompagnati";
-			button2.UseVisualStyleBackColor = true;
-			button2.Click += button2_Click_1;
+			btnControllaFileScompagnati.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
+			btnControllaFileScompagnati.Location = new System.Drawing.Point(971, 179);
+			btnControllaFileScompagnati.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+			btnControllaFileScompagnati.Name = "btnControllaFileScompagnati";
+			btnControllaFileScompagnati.Size = new System.Drawing.Size(101, 73);
+			btnControllaFileScompagnati.TabIndex = 14;
+			btnControllaFileScompagnati.Text = "Controlla file scompagnati";
+			btnControllaFileScompagnati.UseVisualStyleBackColor = true;
+			btnControllaFileScompagnati.Click += btnControllaFileScompagnati_Click;
 			// 
 			// txtDirectory
 			// 
@@ -235,25 +235,25 @@
 			// 
 			// button3
 			// 
-			button3.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
-			button3.Location = new System.Drawing.Point(971, 262);
-			button3.Margin = new System.Windows.Forms.Padding(5);
-			button3.Name = "button3";
-			button3.Size = new System.Drawing.Size(101, 73);
-			button3.TabIndex = 17;
-			button3.Text = "Leggi file Common";
-			button3.UseVisualStyleBackColor = true;
-			button3.Click += button3_Click;
+			btnLeggiFileCommon.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
+			btnLeggiFileCommon.Location = new System.Drawing.Point(971, 262);
+			btnLeggiFileCommon.Margin = new System.Windows.Forms.Padding(5);
+			btnLeggiFileCommon.Name = "btnLeggiFileCommon";
+			btnLeggiFileCommon.Size = new System.Drawing.Size(101, 73);
+			btnLeggiFileCommon.TabIndex = 17;
+			btnLeggiFileCommon.Text = "Leggi file Common";
+			btnLeggiFileCommon.UseVisualStyleBackColor = true;
+			btnLeggiFileCommon.Click += btnLeggiFileCommon_Click;
 			// 
 			// frmMain
 			// 
 			AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
 			AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			ClientSize = new System.Drawing.Size(1087, 517);
-			Controls.Add(button3);
+			Controls.Add(btnLeggiFileCommon);
 			Controls.Add(label4);
 			Controls.Add(txtDirectory);
-			Controls.Add(button2);
+			Controls.Add(btnControllaFileScompagnati);
 			Controls.Add(btnLeggiDbCombo);
 			Controls.Add(btnDbUpdate);
 			Controls.Add(btnDebug);
@@ -271,7 +271,7 @@
 			Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
 			Name = "frmMain";
 			Text = "Systore Launcher";
-			Load += frmMain_Load;
+
 			ResumeLayout(false);
 			PerformLayout();
 		}
@@ -292,10 +292,10 @@
 		private System.Windows.Forms.Button btnDebug;
 		private System.Windows.Forms.Button btnDbUpdate;
 		private System.Windows.Forms.Button btnLeggiDbCombo;
-		private System.Windows.Forms.Button button2;
+		private System.Windows.Forms.Button btnControllaFileScompagnati;
 		private System.Windows.Forms.TextBox txtDirectory;
 		private System.Windows.Forms.Label label4;
-		private System.Windows.Forms.Button button3;
+		private System.Windows.Forms.Button btnLeggiFileCommon;
 	}
 }
 

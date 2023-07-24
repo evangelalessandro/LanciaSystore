@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LanciaSystore.Manager;
+using System;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -18,21 +19,24 @@ namespace LanciaSystore
 		}
 		public Exe_dbupodate()
 		{
-			 
+
 		}
 
-		public bool ExistsExe()
+		private bool ExistsExe()
 		{
-			var path = System.IO.Path.Combine(FolderDatabase,@"DBScripting" , NameFile);
+			var path = System.IO.Path.Combine(FolderDatabase, @"DBScripting", NameFile);
 			_fileExe = new System.IO.FileInfo(path);
-			
+
 			if (_fileExe == null && _fileExe.Exists)
 				return false;
 			return true;
 
 		}
-
-		public void StrartProc(string sqlserverInstance, string database)
+		public void StartProcecure(UIManager manager)
+		{
+			StartProcecure(manager.SelectedDataSource, manager.SelectedDb);
+		}
+		private void StartProcecure(string sqlserverInstance, string database)
 		{
 			if (!ExistsExe())
 			{
@@ -47,7 +51,7 @@ namespace LanciaSystore
 			parameter = @" - s {ServerSql} - u system_itali - p SYS123 - d {DB} - f {FOLDER}";
 
 			parameter = parameter.Replace("{ServerSql}", sqlserverInstance);
-			parameter = parameter.Replace("{FOLDER}", System.IO.Path.Combine(FolderDatabase , database));
+			parameter = parameter.Replace("{FOLDER}", System.IO.Path.Combine(FolderDatabase, database));
 
 			parameter = parameter.Replace("{DB}", database);
 

@@ -294,4 +294,17 @@ internal class UIManager
 		}
 
 	}
+
+	internal void SaveSetting()
+	{
+		var settingManager = new SettingManager();
+		var sett = settingManager.ReadSetting();
+		sett.InstanzaSql = SelectedDataSource;
+
+		sett.Database = SelectedDb;
+		sett.Master = SelectedMaster;
+		sett.CommonFolder = SelectedCommon;
+		sett.Directory = Directory;
+		settingManager.SaveSetting(sett);
+	}
 }

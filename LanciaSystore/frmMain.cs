@@ -94,18 +94,9 @@ namespace LanciaSystore
 
 		private void Form1_FormClosing(object sender, FormClosingEventArgs e)
 		{
-			var settingManager = new SettingManager();
-			var sett = settingManager.ReadSetting();
-			sett.InstanzaSql = txtDataSource.Text;
-			if (lstDatabase.SelectedIndex >= 0)
-				sett.Database = lstDatabase.SelectedItem.ToString();
-			if (lstMaster.SelectedIndex >= 0)
-				sett.Master = lstMaster.SelectedItem.ToString();
-			if (lstCommonFolder.SelectedIndex >= 0)
-				sett.CommonFolder = lstCommonFolder.SelectedItem.ToString();
+			Manager.SaveSetting();
 
-			sett.Directory = Manager.Directory;
-			settingManager.SaveSetting(sett);
+
 
 		}
 
@@ -164,7 +155,7 @@ namespace LanciaSystore
 		}
 		private async Task<bool> CheckUpdateAsync()
 		{
-			await NewSpManager.CreateNewFileSp(Manager.SelectedDataSource, Manager.SelectedDb, Manager.Directory);
+			await NewSpManager.CreateNewFileSp(Manager);
 			btnControllaFileScompagnati.Enabled = true;
 
 			return true;

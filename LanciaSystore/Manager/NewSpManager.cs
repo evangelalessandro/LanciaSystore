@@ -23,7 +23,14 @@ namespace LanciaSystore.Manager
 	internal class NewSpManager
 	{
 		private static List<SqlProcedureFunction> _LIST = new();
-		internal static async Task CreateNewFileSp(string datasource, string database, string folder)
+		internal static async Task CreateNewFileSp(UIManager manager)
+		{
+			await CreateNewFileSp(manager.SelectedDataSource, manager.SelectedDb, manager.Directory);
+
+			return;
+		}
+
+		private static async Task CreateNewFileSp(string datasource, string database, string folder)
 		{
 			_LIST.Clear();
 			string query = "  USE  " + database + " select SPECIFIC_NAME,'' as TableRef,ROUTINE_BODY,ROUTINE_DEFINITION,routine_type " +

@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
@@ -37,6 +39,8 @@ internal class UIManager
 
 	public bool DbUpdateEnable { get; set; }
 	public string SelectedCommon { get; set; }
+
+	public event EventHandler RealoadBind;
 
 	public UIManager()
 	{
@@ -87,6 +91,19 @@ internal class UIManager
 				SelectedCommon = settPrivate.CommonFolder;
 			}
 		}
+		var notify = this as INotifyPropertyChanged;
+		if (notify != null)
+		{
+			notify.PropertyChanged += (a, b) =>
+			{
+				if (b.PropertyName.Contains("Directory", StringComparison.InvariantCultureIgnoreCase))
+					LoadCommonFolder();
+
+				if (this.RealoadBind != null)
+					RealoadBind(this, new EventArgs());
+
+			};
+		}
 	}
 	private static string GetExecutingDirectoryName()
 	{
@@ -119,39 +136,47 @@ internal class UIManager
 	}
 	public void LoadCommonFolder()
 	{
-		foreach (var item in
-		  System.IO.Directory.GetDirectories(Directory, "*"
-		  , SearchOption.TopDirectoryOnly)
+		var listItem = new List<string>();
 
-		  .Select(a => new DirectoryInfo(a)).Where(a => a.Attributes != FileAttributes.Hidden
-		  && a.Attributes != FileAttributes.Encrypted).ToList()
-		  .Where(a => !a.Name.Contains("DevExpress_") && !a.Name.Contains("SLBin")
-		  && !a.Name.Contains("Multimedia")
-		  && !a.Name.StartsWith("SL", StringComparison.InvariantCultureIgnoreCase)
-		  && !a.Name.Contains(".svn")
-		  && !a.Name.Contains("Database")
-		  && !a.Name.Contains(".vs")
-		  && !a.Name.Contains("Device")
-		  && !a.Name.Contains("Documenti")
-		  && !a.Name.Contains("Layout")
-		  && !a.Name.EndsWith("APP4", StringComparison.InvariantCultureIgnoreCase)
-		  && !a.Name.Equals("_Developers", StringComparison.InvariantCultureIgnoreCase)
-		  && !a.Name.Equals("_Patches", StringComparison.InvariantCultureIgnoreCase)
-		  && !a.Name.Equals("Setup", StringComparison.InvariantCultureIgnoreCase)
-		  && !a.Name.Contains("Simula")
-		  && !a.Name.Contains("CefSharp")
-		  && !a.Name.Contains("Directx", StringComparison.InvariantCultureIgnoreCase)
-		  && !a.Name.Contains("Common_mops", StringComparison.InvariantCultureIgnoreCase)
-		  && !a.Name.Contains("runtimes", StringComparison.InvariantCultureIgnoreCase)
+		if (System.IO.Directory.Exists(Directory))
+			foreach (var item in
+			  System.IO.Directory.GetDirectories(Directory, "*"
+			  , SearchOption.TopDirectoryOnly)
+
+			  .Select(a => new DirectoryInfo(a)).Where(a => a.Attributes != FileAttributes.Hidden
+			  && a.Attributes != FileAttributes.Encrypted).ToList()
+			  .Where(a => !a.Name.Contains("DevExpress_") && !a.Name.Contains("SLBin")
+			  && !a.Name.Contains("Multimedia")
+			  && !a.Name.StartsWith("SL", StringComparison.InvariantCultureIgnoreCase)
+			  && !a.Name.Contains(".svn")
+			  && !a.Name.Contains("Database")
+			  && !a.Name.Contains(".vs")
+			  && !a.Name.Contains("Device")
+			  && !a.Name.Contains("Documenti")
+			  && !a.Name.Contains("Layout")
+			  && !a.Name.EndsWith("APP4", StringComparison.InvariantCultureIgnoreCase)
+			  && !a.Name.Equals("_Developers", StringComparison.InvariantCultureIgnoreCase)
+			  && !a.Name.Equals("_Patches", StringComparison.InvariantCultureIgnoreCase)
+			  && !a.Name.Equals("Setup", StringComparison.InvariantCultureIgnoreCase)
+			  && !a.Name.Contains("Simula")
+			  && !a.Name.Contains("CefSharp")
+			  && !a.Name.Contains("Directx", StringComparison.InvariantCultureIgnoreCase)
+			  && !a.Name.Contains("Common_mops", StringComparison.InvariantCultureIgnoreCase)
+			  && !a.Name.Contains("runtimes", StringComparison.InvariantCultureIgnoreCase)
+			  && !a.Name.Contains("debug", StringComparison.InvariantCultureIgnoreCase)
 
 
-		  )
-		  .ToList()
+			  )
+			  .ToList()
 
-		  )
-		{
-			ListCommonFolder.Add(item.Name);
-		}
+			  )
+			{
+				listItem.Add(item.Name);
+			}
+
+		ListCommonFolder = new ObservableCollection<string>(listItem);
+
+
 
 	}
 	public void ApplyDebug()
@@ -246,5 +271,27 @@ internal class UIManager
 		{
 			ListDatabase = new ObservableCollection<string>(listDb);
 		}
+	}
+
+	internal void RemoveDatasource(string text)
+	{
+		var settingManager = new SettingManager();
+
+		var publicSett = settingManager.ReadPublicSetting();
+		if (publicSett.InstanzeSql.Contains(text))
+		{
+			publicSett.InstanzeSql.Remove(text);
+			publicSett.InstanzeSql = publicSett.InstanzeSql.Distinct().ToList();
+			settingManager.SaveSetting(publicSett);
+			settingManager.ReadPublicSetting();
+
+		}
+		ListDataSource.Clear();
+		foreach (var item in publicSett.InstanzeSql)
+		{
+			ListDataSource.Add(item);
+
+		}
+
 	}
 }

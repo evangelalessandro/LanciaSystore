@@ -1,7 +1,9 @@
 ﻿using LanciaSystore.Manager;
 using System;
 using System.ComponentModel;
+using System.Data.Common;
 using System.Diagnostics;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -16,19 +18,12 @@ namespace LanciaSystore
 		{
 			InitializeComponent();
 			this.FormClosing += Form1_FormClosing;
+			//Manager.RealoadBind += (a, b) => { BindDatasource(); };
 
-			lstMaster.SelectedIndexChanged += LstMaster_SelectedIndexChanged;
+
 
 			CheckEnableAvvia();
-			txtDataSource.DataBindings.Add("Text", Manager, "SelectedDataSource");
-			cbodataSource.DataBindings.Add("DataSource", Manager, "ListDataSource");
-			//cbodataSource.DataBindings.Add("Text", Manager, "SelectedDataSource");
-
-			lstDatabase.DataBindings.Add("DataSource", Manager, "ListDatabase");
-
-			lstMaster.DataBindings.Add("DataSource", Manager, "ListMaster");
-
-			lstCommonFolder.DataBindings.Add("DataSource", Manager, "ListCommonFolder");
+			BindDatasource();
 
 			//lstDatabase.DataBindings.Add("Text", Manager, "SelectedDb");
 			var obj = ((INotifyPropertyChanged)Manager);
@@ -44,11 +39,46 @@ namespace LanciaSystore
 			txtDirectory.TextChanged += TxtDirectory_TextChanged;
 			Manager.Directory = txtDirectory.Text;
 			btnLeggiFileCommon.Enabled = false;
-		}
 
+			this.Text = Assembly.GetExecutingAssembly().GetName().Name + " " + typeof(LanciaSystore.frmMain).Assembly.GetName().Version;
+		}
+		private void BindDatasource()
+		{
+			try
+			{
+
+
+				lstMaster.SelectedIndexChanged -= LstMaster_SelectedIndexChanged;
+				txtDataSource.DataBindings.Clear();
+				cbodataSource.DataBindings.Clear();
+				lstDatabase.DataBindings.Clear();
+				lstMaster.DataBindings.Clear();
+				lstCommonFolder.DataBindings.Clear();
+
+				txtDataSource.DataBindings.Add("Text", Manager, "SelectedDataSource");
+				cbodataSource.DataBindings.Add("DataSource", Manager, "ListDataSource");
+				//cbodataSource.DataBindings.Add("Text", Manager, "SelectedDataSource");
+
+				lstDatabase.DataBindings.Add("DataSource", Manager, "ListDatabase");
+
+				lstMaster.DataBindings.Add("DataSource", Manager, "ListMaster");
+
+				lstCommonFolder.DataBindings.Add("DataSource", Manager, "ListCommonFolder");
+				Debug.WriteLine("manager Items :" + Manager.ListCommonFolder.Count.ToString());
+				Debug.WriteLine("listcommon Items :" + lstCommonFolder.Items.Count.ToString());
+				lstCommonFolder.Update();
+				lstMaster.SelectedIndexChanged += LstMaster_SelectedIndexChanged;
+			}
+			catch (Exception)
+			{
+
+
+			}
+		}
 		private void TxtDirectory_TextChanged(object sender, EventArgs e)
 		{
 			Manager.Directory = txtDirectory.Text;
+
 		}
 
 		private void LstMaster_SelectedIndexChanged(object sender, EventArgs e)
@@ -59,7 +89,7 @@ namespace LanciaSystore
 
 		private void CheckEnableAvvia()
 		{
-			btnAvvia.Enabled = (lstMaster.Text.Length > 0);
+			btnAvvia.Enabled = (Manager.SelectedMaster.Length > 0);
 		}
 
 		private void Form1_FormClosing(object sender, FormClosingEventArgs e)
@@ -134,7 +164,7 @@ namespace LanciaSystore
 		}
 		private async Task<bool> CheckUpdateAsync()
 		{
-			await NewSpManager.CreateNewFileSp(Manager.SelectedDataSource, lstDatabase.Text, Manager.Directory);
+			await NewSpManager.CreateNewFileSp(Manager.SelectedDataSource, Manager.SelectedDb, Manager.Directory);
 			btnControllaFileScompagnati.Enabled = true;
 
 			return true;
@@ -143,10 +173,19 @@ namespace LanciaSystore
 		private async void btnLeggiFileCommon_Click(object sender, EventArgs e)
 		{
 			btnLeggiFileCommon.Enabled = false;
-			var fileCom = new FileCommonManager(Manager.SelectedDataSource, lstDatabase.Text, Manager.Directory + @"\" + lstCommonFolder.Text);
+			var fileCom = new FileCommonManager(Manager.SelectedDataSource, Manager.SelectedDb, Manager.Directory + @"\" + lstCommonFolder.Text);
 			await fileCom.ManageCommonFile();
 
 			btnLeggiFileCommon.Enabled = true;
+
+		}
+
+		private void btnRemove_Click(object sender, EventArgs e)
+		{
+			Manager.RemoveDatasource(cbodataSource.Text);
+
+			BindDatasource();
+			cbodataSource.Refresh();
 
 		}
 	}

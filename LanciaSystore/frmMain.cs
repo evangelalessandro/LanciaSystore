@@ -18,21 +18,15 @@ namespace LanciaSystore
 		{
 			InitializeComponent();
 			this.FormClosing += Form1_FormClosing;
-			//Manager.RealoadBind += (a, b) => { BindDatasource(); };
-
-
 
 			CheckEnableAvvia();
 			BindDatasource();
 
-			//lstDatabase.DataBindings.Add("Text", Manager, "SelectedDb");
 			var obj = ((INotifyPropertyChanged)Manager);
 			obj.PropertyChanged += (a, e) =>
 			{
 				Debug.WriteLine("Changed:" + e.PropertyName);
 			};
-			//lstCommonFolder.DataBindings.Add("SelectedValue", Manager, "SelectedCommon");
-			//lstMaster.DataBindings.Add("SelectedValue", Manager, "SelectedMaster");
 
 			txtDirectory.Text = Manager.Directory;
 

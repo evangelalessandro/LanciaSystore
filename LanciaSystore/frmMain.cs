@@ -173,6 +173,18 @@ namespace LanciaSystore
 			cbodataSource.Refresh();
 
 		}
+
+		private void btnSearchTraslation_Click(object sender, EventArgs e)
+		{
+			var trad = new SpTranslationGrabberManager(Manager);
+			trad.Exec();
+		}
+
+		private void btnTraduzioniPkt_Click(object sender, EventArgs e)
+		{
+			var trad = new FileCommonManagerPKT(Manager);
+			trad.Exec();
+		}
 	}
 }
 

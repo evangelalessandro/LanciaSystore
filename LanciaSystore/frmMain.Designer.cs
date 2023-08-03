@@ -47,12 +47,14 @@
 			label4 = new System.Windows.Forms.Label();
 			btnLeggiFileCommon = new System.Windows.Forms.Button();
 			btnRemove = new System.Windows.Forms.Button();
+			btnSearchTraslation = new System.Windows.Forms.Button();
+			btnTraduzioniPkt = new System.Windows.Forms.Button();
 			SuspendLayout();
 			// 
 			// button1
 			// 
 			button1.Location = new System.Drawing.Point(260, 49);
-			button1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			button1.Margin = new System.Windows.Forms.Padding(4);
 			button1.Name = "button1";
 			button1.Size = new System.Drawing.Size(88, 26);
 			button1.TabIndex = 0;
@@ -63,7 +65,7 @@
 			// txtDataSource
 			// 
 			txtDataSource.Location = new System.Drawing.Point(28, 49);
-			txtDataSource.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			txtDataSource.Margin = new System.Windows.Forms.Padding(4);
 			txtDataSource.Name = "txtDataSource";
 			txtDataSource.Size = new System.Drawing.Size(224, 23);
 			txtDataSource.TabIndex = 1;
@@ -75,7 +77,7 @@
 			lstDatabase.HorizontalScrollbar = true;
 			lstDatabase.ItemHeight = 15;
 			lstDatabase.Location = new System.Drawing.Point(28, 98);
-			lstDatabase.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			lstDatabase.Margin = new System.Windows.Forms.Padding(4);
 			lstDatabase.Name = "lstDatabase";
 			lstDatabase.Size = new System.Drawing.Size(301, 229);
 			lstDatabase.TabIndex = 2;
@@ -108,16 +110,16 @@
 			lstMaster.HorizontalScrollbar = true;
 			lstMaster.ItemHeight = 15;
 			lstMaster.Location = new System.Drawing.Point(382, 98);
-			lstMaster.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			lstMaster.Margin = new System.Windows.Forms.Padding(4);
 			lstMaster.Name = "lstMaster";
-			lstMaster.Size = new System.Drawing.Size(159, 229);
+			lstMaster.Size = new System.Drawing.Size(206, 229);
 			lstMaster.TabIndex = 4;
 			// 
 			// btnAvvia
 			// 
-			btnAvvia.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
-			btnAvvia.Location = new System.Drawing.Point(853, 346);
-			btnAvvia.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			btnAvvia.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right;
+			btnAvvia.Location = new System.Drawing.Point(899, 354);
+			btnAvvia.Margin = new System.Windows.Forms.Padding(4);
 			btnAvvia.Name = "btnAvvia";
 			btnAvvia.Size = new System.Drawing.Size(88, 28);
 			btnAvvia.TabIndex = 6;
@@ -127,21 +129,21 @@
 			// 
 			// lstCommonFolder
 			// 
-			lstCommonFolder.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
+			lstCommonFolder.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right;
 			lstCommonFolder.FormattingEnabled = true;
 			lstCommonFolder.HorizontalScrollbar = true;
 			lstCommonFolder.ItemHeight = 15;
-			lstCommonFolder.Location = new System.Drawing.Point(634, 98);
-			lstCommonFolder.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			lstCommonFolder.Location = new System.Drawing.Point(681, 98);
+			lstCommonFolder.Margin = new System.Windows.Forms.Padding(4);
 			lstCommonFolder.Name = "lstCommonFolder";
-			lstCommonFolder.Size = new System.Drawing.Size(201, 274);
+			lstCommonFolder.Size = new System.Drawing.Size(201, 259);
 			lstCommonFolder.TabIndex = 7;
 			// 
 			// label3
 			// 
 			label3.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
 			label3.AutoSize = true;
-			label3.Location = new System.Drawing.Point(630, 80);
+			label3.Location = new System.Drawing.Point(677, 80);
 			label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
 			label3.Name = "label3";
 			label3.Size = new System.Drawing.Size(91, 15);
@@ -152,7 +154,7 @@
 			// 
 			cbodataSource.FormattingEnabled = true;
 			cbodataSource.Location = new System.Drawing.Point(356, 49);
-			cbodataSource.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			cbodataSource.Margin = new System.Windows.Forms.Padding(4);
 			cbodataSource.Name = "cbodataSource";
 			cbodataSource.Size = new System.Drawing.Size(312, 23);
 			cbodataSource.TabIndex = 9;
@@ -160,8 +162,8 @@
 			// btnAddMaster
 			// 
 			btnAddMaster.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
-			btnAddMaster.Location = new System.Drawing.Point(557, 98);
-			btnAddMaster.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			btnAddMaster.Location = new System.Drawing.Point(604, 98);
+			btnAddMaster.Margin = new System.Windows.Forms.Padding(4);
 			btnAddMaster.Name = "btnAddMaster";
 			btnAddMaster.Size = new System.Drawing.Size(60, 91);
 			btnAddMaster.TabIndex = 10;
@@ -172,10 +174,10 @@
 			// btnDebug
 			// 
 			btnDebug.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
-			btnDebug.Location = new System.Drawing.Point(764, 10);
-			btnDebug.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			btnDebug.Location = new System.Drawing.Point(811, 10);
+			btnDebug.Margin = new System.Windows.Forms.Padding(4);
 			btnDebug.Name = "btnDebug";
-			btnDebug.Size = new System.Drawing.Size(176, 39);
+			btnDebug.Size = new System.Drawing.Size(176, 30);
 			btnDebug.TabIndex = 11;
 			btnDebug.Text = "Debug  = 1";
 			btnDebug.UseVisualStyleBackColor = true;
@@ -184,8 +186,8 @@
 			// btnDbUpdate
 			// 
 			btnDbUpdate.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
-			btnDbUpdate.Location = new System.Drawing.Point(853, 98);
-			btnDbUpdate.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			btnDbUpdate.Location = new System.Drawing.Point(900, 98);
+			btnDbUpdate.Margin = new System.Windows.Forms.Padding(4);
 			btnDbUpdate.Name = "btnDbUpdate";
 			btnDbUpdate.Size = new System.Drawing.Size(88, 28);
 			btnDbUpdate.TabIndex = 12;
@@ -196,7 +198,7 @@
 			// btnLeggiDbCombo
 			// 
 			btnLeggiDbCombo.Location = new System.Drawing.Point(669, 48);
-			btnLeggiDbCombo.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			btnLeggiDbCombo.Margin = new System.Windows.Forms.Padding(4);
 			btnLeggiDbCombo.Name = "btnLeggiDbCombo";
 			btnLeggiDbCombo.Size = new System.Drawing.Size(88, 26);
 			btnLeggiDbCombo.TabIndex = 13;
@@ -207,8 +209,8 @@
 			// btnControllaFileScompagnati
 			// 
 			btnControllaFileScompagnati.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
-			btnControllaFileScompagnati.Location = new System.Drawing.Point(850, 134);
-			btnControllaFileScompagnati.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			btnControllaFileScompagnati.Location = new System.Drawing.Point(897, 134);
+			btnControllaFileScompagnati.Margin = new System.Windows.Forms.Padding(4);
 			btnControllaFileScompagnati.Name = "btnControllaFileScompagnati";
 			btnControllaFileScompagnati.Size = new System.Drawing.Size(88, 55);
 			btnControllaFileScompagnati.TabIndex = 14;
@@ -219,7 +221,7 @@
 			// txtDirectory
 			// 
 			txtDirectory.Location = new System.Drawing.Point(108, 14);
-			txtDirectory.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			txtDirectory.Margin = new System.Windows.Forms.Padding(4);
 			txtDirectory.Name = "txtDirectory";
 			txtDirectory.Size = new System.Drawing.Size(640, 23);
 			txtDirectory.TabIndex = 15;
@@ -237,8 +239,8 @@
 			// btnLeggiFileCommon
 			// 
 			btnLeggiFileCommon.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
-			btnLeggiFileCommon.Location = new System.Drawing.Point(850, 196);
-			btnLeggiFileCommon.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			btnLeggiFileCommon.Location = new System.Drawing.Point(897, 196);
+			btnLeggiFileCommon.Margin = new System.Windows.Forms.Padding(4);
 			btnLeggiFileCommon.Name = "btnLeggiFileCommon";
 			btnLeggiFileCommon.Size = new System.Drawing.Size(88, 55);
 			btnLeggiFileCommon.TabIndex = 17;
@@ -248,20 +250,46 @@
 			// 
 			// btnRemove
 			// 
-			btnRemove.Location = new System.Drawing.Point(764, 52);
+			btnRemove.Location = new System.Drawing.Point(760, 48);
 			btnRemove.Margin = new System.Windows.Forms.Padding(4);
 			btnRemove.Name = "btnRemove";
-			btnRemove.Size = new System.Drawing.Size(88, 23);
+			btnRemove.Size = new System.Drawing.Size(87, 27);
 			btnRemove.TabIndex = 18;
 			btnRemove.Text = "Rimuovi";
 			btnRemove.UseVisualStyleBackColor = true;
 			btnRemove.Click += btnRemove_Click;
 			// 
+			// btnSearchTraslation
+			// 
+			btnSearchTraslation.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
+			btnSearchTraslation.Location = new System.Drawing.Point(897, 259);
+			btnSearchTraslation.Margin = new System.Windows.Forms.Padding(4);
+			btnSearchTraslation.Name = "btnSearchTraslation";
+			btnSearchTraslation.Size = new System.Drawing.Size(88, 41);
+			btnSearchTraslation.TabIndex = 19;
+			btnSearchTraslation.Text = "Cerca traduzioni";
+			btnSearchTraslation.UseVisualStyleBackColor = true;
+			btnSearchTraslation.Click += btnSearchTraslation_Click;
+			// 
+			// btnTraduzioniPkt
+			// 
+			btnTraduzioniPkt.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
+			btnTraduzioniPkt.Location = new System.Drawing.Point(897, 308);
+			btnTraduzioniPkt.Margin = new System.Windows.Forms.Padding(4);
+			btnTraduzioniPkt.Name = "btnTraduzioniPkt";
+			btnTraduzioniPkt.Size = new System.Drawing.Size(88, 41);
+			btnTraduzioniPkt.TabIndex = 20;
+			btnTraduzioniPkt.Text = "Cerca traduzioni pkt";
+			btnTraduzioniPkt.UseVisualStyleBackColor = true;
+			btnTraduzioniPkt.Click += btnTraduzioniPkt_Click;
+			// 
 			// frmMain
 			// 
 			AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			ClientSize = new System.Drawing.Size(951, 388);
+			ClientSize = new System.Drawing.Size(998, 395);
+			Controls.Add(btnTraduzioniPkt);
+			Controls.Add(btnSearchTraslation);
 			Controls.Add(btnRemove);
 			Controls.Add(btnLeggiFileCommon);
 			Controls.Add(label4);
@@ -281,7 +309,7 @@
 			Controls.Add(lstDatabase);
 			Controls.Add(txtDataSource);
 			Controls.Add(button1);
-			Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			Margin = new System.Windows.Forms.Padding(4);
 			Name = "frmMain";
 			Text = "Systore Launcher";
 			ResumeLayout(false);
@@ -309,6 +337,8 @@
 		private System.Windows.Forms.Label label4;
 		private System.Windows.Forms.Button btnLeggiFileCommon;
 		private System.Windows.Forms.Button btnRemove;
+		private System.Windows.Forms.Button btnSearchTraslation;
+		private System.Windows.Forms.Button btnTraduzioniPkt;
 	}
 }
 

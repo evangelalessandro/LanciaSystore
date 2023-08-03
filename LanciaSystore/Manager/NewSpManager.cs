@@ -22,7 +22,7 @@ namespace LanciaSystore.Manager
 {
 	internal class NewSpManager
 	{
-		private static List<SqlProcedureFunction> _LIST = new();
+
 		internal static async Task CreateNewFileSp(UIManager manager)
 		{
 			await CreateNewFileSp(manager.SelectedDataSource, manager.SelectedDb, manager.Directory);
@@ -32,46 +32,8 @@ namespace LanciaSystore.Manager
 
 		private static async Task CreateNewFileSp(string datasource, string database, string folder)
 		{
-			_LIST.Clear();
-			string query = "  USE  " + database + " select SPECIFIC_NAME,'' as TableRef,ROUTINE_BODY,ROUTINE_DEFINITION,routine_type " +
-						"  from information_schema.routines                                                " +
-						" where routine_type in ('PROCEDURE', 'FUNCTION') and SPECIFIC_SCHEMA = 'dbo'	   " +
-						" union																			   " +
-						" select trg.name as trigger_name,												   " +
-						"    schema_name(tab.schema_id) + '.' + tab.name as [table],					   " +
-						"   																			   " +
-						"    'SQL' as Body,																   " +
-						"    																			   " +
-						"    object_definition(trg.object_id) as [definition],							   " +
-						"																				   " +
-						"	case when trg.[type] = 'TA' then 'Assembly (CLR) trigger'					   " +
-						"																				   " +
-						"		when trg.[type] = 'TR' then 'SQL trigger'								   " +
-						"																				   " +
-						"		else '' end as [type]													   " +
-						"from sys.triggers trg															   " +
-						"																				   " +
-						"	left																		   " +
-						"join sys.objects tab															   " +
-						"																				   " +
-						"		on trg.parent_id = tab.object_id										   " +
-						"where trg.[type] = 'TR'														   ";
+			var listSpFromDb = new ListSpFunctionManager(database, datasource);
 
-
-
-			TestConnessione _test = new TestConnessione(datasource);
-			DataTable tab = new DataTable();
-
-			using (SqlDataAdapter comm = new SqlDataAdapter(query, _test.Connessione))
-			{
-				// Adapter fill table function
-				comm.Fill(tab);
-			}
-			_LIST.Clear();
-			foreach (DataRow item in tab.Rows.AsParallel())
-			{
-				_LIST.Add(new SqlProcedureFunction(item["SPECIFIC_NAME"].ToString(), item["ROUTINE_DEFINITION"].ToString(), item["routine_type"].ToString()));
-			}
 			folder = Path.Combine(folder, "Database");
 			var folders = Directory.GetDirectories(folder, "WS*");
 
@@ -84,7 +46,7 @@ namespace LanciaSystore.Manager
 				await foreach (var item in files.Where(a => !a.Contains(@"\CreazioneDatabase\") && !a.Contains(@"\Update\") && !a.Contains(@"\Percorsi\") && !a.Contains(@"\Path\")).ToAsyncEnumerable())
 				{
 					var file = item.Split(@"\").Last().Replace("dbo.", "").Replace(".sql", ""); ;
-					var proc = _LIST.FirstOrDefault(a => a.Name.Equals(file, StringComparison.InvariantCultureIgnoreCase));
+					var proc = listSpFromDb.List.FirstOrDefault(a => a.Name.Equals(file, StringComparison.InvariantCultureIgnoreCase));
 					if (proc != null)
 					{
 						proc.File = item;
@@ -114,7 +76,7 @@ namespace LanciaSystore.Manager
 				}
 
 			}
-			var listEmpty = await _LIST.Where(a => a.File == "").ToAsyncEnumerable().ToListAsync();
+			var listEmpty = await listSpFromDb.List.Where(a => a.File == "").ToAsyncEnumerable().ToListAsync();
 			if (listEmpty.Count > 0)
 			{
 				var folderDest = Path.Combine(folder, database, "CustomAle");
@@ -132,6 +94,7 @@ namespace LanciaSystore.Manager
 			}
 			else
 			{
+
 				MessageBox.Show("Niente di nuovo ", "Info", MessageBoxButtons.OK, icon: MessageBoxIcon.Information);
 			}
 

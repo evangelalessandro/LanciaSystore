@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace LanciaSystore
 {
@@ -81,7 +82,7 @@ namespace LanciaSystore
 			}
 		}
 
-		private List<string> GetListString(string query)
+		public List<string> GetListString(string query, SqlParameterCollection[] parameterCollection = null)
 		{
 			var list = new List<string>();
 
@@ -92,11 +93,17 @@ namespace LanciaSystore
 			return list;
 		}
 
-		private List<DataRow> GetData(string query)
+		public List<DataRow> GetData(string query, SqlParameterCollection[] parameterCollection = null)
 		{
 
 			List<DataRow> dataList = new List<DataRow>();
-			using (SqlDataAdapter da = new SqlDataAdapter(query, _connection))
+			using SqlCommand sqlCommand = new SqlCommand(query, _connection);
+			if (parameterCollection != null)
+			{
+				sqlCommand.Parameters.AddRange(parameterCollection);
+			}
+			sqlCommand.CommandType = CommandType.Text;
+			using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))
 			{
 				DataTable dt = new DataTable();
 				da.Fill(dt);
@@ -108,7 +115,16 @@ namespace LanciaSystore
 			return dataList;
 
 		}
+		public async Task<bool> ExecCommand(string query, SqlParameter[] parameterCollection = null)
+		{
 
+			List<DataRow> dataList = new List<DataRow>();
+			using SqlCommand sqlCommand = new SqlCommand(query, _connection);
+			sqlCommand.Parameters.AddRange(parameterCollection);
+			sqlCommand.CommandType = CommandType.Text;
+			await sqlCommand.ExecuteNonQueryAsync();
+			return true;
+		}
 
 		public SqlConnection Connessione { get { return _connection; } }
 

@@ -9,17 +9,17 @@ namespace LanciaSystore
 	{
 		public static string NameFile = "DBUpdate.exe";
 		private System.IO.FileInfo _fileExe;
+		private string _folder;
 		private string FolderDatabase
 		{
 			get
 			{
-				return System.IO.Path.Combine(System.IO.Path.GetDirectoryName(
-			  System.Reflection.Assembly.GetExecutingAssembly().Location), @"Database");
+				return System.IO.Path.Combine(_folder, @"Database");
 			}
 		}
-		public Exe_dbupodate()
+		public Exe_dbupodate(Manager.UIManager Manager)
 		{
-
+			_folder = Manager.Directory;
 		}
 
 		private bool ExistsExe()

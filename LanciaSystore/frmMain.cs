@@ -132,7 +132,7 @@ namespace LanciaSystore
 
 		private void btnDbUpdate_Click(object sender, EventArgs e)
 		{
-			var exe = new Exe_dbupodate();
+			var exe = new Exe_dbupodate(Manager);
 			exe.StartProcecure(Manager);
 		}
 

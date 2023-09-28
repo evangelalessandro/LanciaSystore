@@ -72,6 +72,7 @@ namespace LanciaSystore
 		private void TxtDirectory_TextChanged(object sender, EventArgs e)
 		{
 			Manager.Directory = txtDirectory.Text;
+			Manager.RefreshDbList();
 
 		}
 
@@ -83,7 +84,7 @@ namespace LanciaSystore
 
 		private void CheckEnableAvvia()
 		{
-			btnAvvia.Enabled = (Manager.SelectedMaster.Length > 0);
+			btnAvvia.Enabled = Manager.SelectedMaster!=null && (Manager.SelectedMaster.Length > 0);
 		}
 
 		private void Form1_FormClosing(object sender, FormClosingEventArgs e)

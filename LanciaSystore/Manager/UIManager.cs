@@ -222,6 +222,8 @@ internal class UIManager
 		finally
 		{
 			ListMaster = new ObservableCollection<string>(list);
+			if (ListMaster.Count > 0 )
+				SelectedMaster = list[0];	
 
 		}
 

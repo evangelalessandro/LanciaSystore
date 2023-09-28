@@ -4,8 +4,10 @@
 		<TargetFramework>net7.0-windows</TargetFramework>
 		<UseWindowsForms>true</UseWindowsForms>
 		<GenerateAssemblyInfo>False</GenerateAssemblyInfo>
-		<BaseOutputPath>C:\Systemlogistics.net\HAITIAN_VI21IM009\</BaseOutputPath>
+		<BaseOutputPath>C:\Systemlogistics.net\Tools\LanciaSystore\</BaseOutputPath>
 		<PlatformTarget>x64</PlatformTarget>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<BaseIntermediateOutputPath />
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 	  <Deterministic>False</Deterministic>

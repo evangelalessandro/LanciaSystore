@@ -358,7 +358,13 @@ internal class FileCommonManager
 		catch (Exception ex)
 		{
 
-			MessageBox.Show("Errore nella lettura della ribbon principale", "Errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
+#pragma warning disable CA1416 // Convalida compatibilità della piattaforma
+#pragma warning disable CA1416 // Convalida compatibilità della piattaforma
+#pragma warning disable CA1416 // Convalida compatibilità della piattaforma
+			DialogResult dialogResult = MessageBox.Show("Errore nella lettura della ribbon principale", "Errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
+#pragma warning restore CA1416 // Convalida compatibilità della piattaforma
+#pragma warning restore CA1416 // Convalida compatibilità della piattaforma
+#pragma warning restore CA1416 // Convalida compatibilità della piattaforma
 		}
 		return root;
 	}
@@ -407,7 +413,7 @@ internal class FileCommonManager
 		}
 		//
 		///<AccessLevel>
-		//< UserRoles value = ",SYSADM," type = "[S]" />
+		//< UserRoles value = ",SYSADM," type = "[S]" 
 		//</ AccessLevel >
 		bool write = false;
 		var listItem = txtIndex.Where(a => a.Item1.Contains("<Name value=\"" + item.Name + "\"")).OrderByDescending(a => a.Item2).FirstOrDefault();

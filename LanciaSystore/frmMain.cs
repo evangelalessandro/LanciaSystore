@@ -78,6 +78,8 @@ namespace LanciaSystore
 
 		private void LstMaster_SelectedIndexChanged(object sender, EventArgs e)
 		{
+			Manager.SelectedMaster = lstMaster.Text;
+
 			CheckEnableAvvia();
 
 		}

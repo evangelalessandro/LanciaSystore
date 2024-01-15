@@ -13,7 +13,9 @@ namespace LanciaSystore
 	{
 		internal UIManager Manager { get; set; } = new();
 
-
+		/// <summary>
+		/// Form principale
+		/// </summary>
 		public frmMain()
 		{
 			InitializeComponent();
@@ -86,7 +88,7 @@ namespace LanciaSystore
 
 		private void CheckEnableAvvia()
 		{
-			btnAvvia.Enabled = Manager.SelectedMaster!=null && (Manager.SelectedMaster.Length > 0);
+			btnAvvia.Enabled = Manager.SelectedMaster != null && (Manager.SelectedMaster.Length > 0);
 		}
 
 		private void Form1_FormClosing(object sender, FormClosingEventArgs e)

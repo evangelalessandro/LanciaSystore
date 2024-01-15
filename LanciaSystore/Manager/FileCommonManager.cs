@@ -412,9 +412,9 @@ internal class FileCommonManager
 
 		}
 		//
-		///<AccessLevel>
-		//< UserRoles value = ",SYSADM," type = "[S]" 
-		//</ AccessLevel >
+		////<AccessLevel>
+		///<UserRoles value = ",SYSADM," type = "[S]" ></UserRoles>
+
 		bool write = false;
 		var listItem = txtIndex.Where(a => a.Item1.Contains("<Name value=\"" + item.Name + "\"")).OrderByDescending(a => a.Item2).FirstOrDefault();
 		if (listItem != null)

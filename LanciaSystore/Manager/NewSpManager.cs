@@ -79,18 +79,31 @@ namespace LanciaSystore.Manager
 			var listEmpty = await listSpFromDb.List.Where(a => a.File == "").ToAsyncEnumerable().ToListAsync();
 			if (listEmpty.Count > 0)
 			{
-				var folderDest = Path.Combine(folder, database, "CustomAle");
-				if (!Directory.Exists(folderDest))
-				{
-					Directory.CreateDirectory(folderDest);
-				}
 
+
+				var folderDest = "";
 
 				foreach (var item in listEmpty)
 				{
+					folderDest = "";
+					for (var i = item.Name.Length - 1; i > 2; i--)
+					{
+						var name = item.Name.Substring(0, i);
+
+						var finded = listSpFromDb.List.Where(a => a.Name.StartsWith(name) && a.File != "").FirstOrDefault();
+
+						if (finded != null)
+						{
+							folderDest = new System.IO.FileInfo(finded.File).Directory.FullName;
+							break;
+
+						}
+
+
+					}
 					File.WriteAllText(Path.Combine(folderDest, "dbo." + item.Name + ".sql"), item.Content, new UTF8Encoding());
 				}
-				MessageBox.Show("Trovate  " + listEmpty.Count().ToString() + " sp, generati i nuovi file e messi in " + folderDest, "Info", MessageBoxButtons.OK, icon: MessageBoxIcon.Exclamation);
+				MessageBox.Show("Trovate  " + listEmpty.Count().ToString() + " sp, generati i nuovi file e messi nelle cartelle ", "Info", MessageBoxButtons.OK, icon: MessageBoxIcon.Exclamation);
 			}
 			else
 			{

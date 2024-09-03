@@ -3,6 +3,7 @@ using System;
 using System.ComponentModel;
 using System.Data.Common;
 using System.Diagnostics;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -57,6 +58,8 @@ namespace LanciaSystore
 
 				lstDatabase.DataBindings.Add("DataSource", Manager, "ListDatabase");
 
+				txtDirectory.DataBindings.Add("DataSource", Manager, "DirectoryListItems");
+
 				lstMaster.DataBindings.Add("DataSource", Manager, "ListMaster");
 
 				lstCommonFolder.DataBindings.Add("DataSource", Manager, "ListCommonFolder");
@@ -75,6 +78,10 @@ namespace LanciaSystore
 		{
 			Manager.Directory = txtDirectory.Text;
 			Manager.RefreshDbList();
+
+			//txtDirectory.Items.Clear();
+
+
 
 		}
 

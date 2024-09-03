@@ -28,7 +28,7 @@ namespace LanciaSystore
 		{
 			StrartProc(manager.SelectedDataSource, manager.SelectedMaster, manager.SelectedCommon, manager.SelectedDb, manager.SelectedDb);
 		}
-		private void StrartProc(string sqlserverInstance, string MasterName, string CommonFolder, string plantName, string database)
+		private void StrartProc(string sqlserverInstance, string MasterName, string commonFolder, string plantName, string database)
 		{
 			if (!ExistsExe())
 			{
@@ -39,7 +39,7 @@ namespace LanciaSystore
 			parameter = "PathFilesCommon={Common};DataSource={ServerSql};" +
 				"InitialCatalog={DB};Name={MASTER};PlantName={PLANTNAME};USER=SYSTEM;";
 
-			parameter = parameter.Replace("{Common}", CommonFolder);
+			parameter = parameter.Replace("{Common}", commonFolder);
 			parameter = parameter.Replace("{ServerSql}", sqlserverInstance);
 			parameter = parameter.Replace("{MASTER}", MasterName);
 			parameter = parameter.Replace("{PLANTNAME}", plantName);

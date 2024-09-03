@@ -43,7 +43,7 @@
 			btnDbUpdate = new System.Windows.Forms.Button();
 			btnLeggiDbCombo = new System.Windows.Forms.Button();
 			btnControllaFileScompagnati = new System.Windows.Forms.Button();
-			txtDirectory = new System.Windows.Forms.TextBox();
+			txtDirectory = new System.Windows.Forms.ComboBox();
 			label4 = new System.Windows.Forms.Label();
 			btnLeggiFileCommon = new System.Windows.Forms.Button();
 			btnRemove = new System.Windows.Forms.Button();
@@ -225,6 +225,8 @@
 			txtDirectory.Name = "txtDirectory";
 			txtDirectory.Size = new System.Drawing.Size(640, 23);
 			txtDirectory.TabIndex = 15;
+			txtDirectory.Enabled = true;
+
 			// 
 			// label4
 			// 
@@ -333,7 +335,7 @@
 		private System.Windows.Forms.Button btnDbUpdate;
 		private System.Windows.Forms.Button btnLeggiDbCombo;
 		private System.Windows.Forms.Button btnControllaFileScompagnati;
-		private System.Windows.Forms.TextBox txtDirectory;
+		private System.Windows.Forms.ComboBox txtDirectory;
 		private System.Windows.Forms.Label label4;
 		private System.Windows.Forms.Button btnLeggiFileCommon;
 		private System.Windows.Forms.Button btnRemove;

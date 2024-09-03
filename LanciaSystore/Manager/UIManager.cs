@@ -222,8 +222,8 @@ internal class UIManager
 		finally
 		{
 			ListMaster = new ObservableCollection<string>(list);
-			if (ListMaster.Count > 0 )
-				SelectedMaster = list[0];	
+			if (ListMaster.Count > 0)
+				SelectedMaster = list[0];
 
 		}
 
@@ -235,6 +235,8 @@ internal class UIManager
 	/// </summary>
 	public void RefreshDbList()
 	{
+		Cursor.Current = Cursors.WaitCursor;
+
 		var listDb = new List<string>();
 		try
 		{
@@ -273,6 +275,80 @@ internal class UIManager
 		{
 			ListDatabase = new ObservableCollection<string>(listDb);
 		}
+
+		UpdateDirectoryList();
+
+		Cursor.Current = Cursors.Default;
+	}
+	public ObservableCollection<string> DirectoryListItems { get; set; } = new ObservableCollection<string>();
+	private void UpdateDirectoryList()
+	{
+		Cursor.Current = Cursors.WaitCursor;
+		var listItem = DirectoryListItems.ToList();
+		try
+		{
+			var list = System.IO.Directory.GetDirectories(Directory.Trim(), "Database", System.IO.SearchOption.AllDirectories).ToList();
+
+			foreach (var file in list.ToList())
+			{
+				var dir = new System.IO.DirectoryInfo(file);
+				var lst = dir.FullName.LastIndexOf(dir.Name);
+				var root = dir.FullName.Remove(lst);
+				list.Remove(file);
+				list.Add(root);
+				//if ( )
+				//{
+
+				//}
+				try
+				{
+					if (System.IO.Directory.GetFiles(root, "SystemLogisticsApp4.exe", System.IO.SearchOption.TopDirectoryOnly).Length == 0)
+						list.Remove(root);
+				}
+				catch (Exception)
+				{
+
+					list.Remove(root);
+				}
+
+
+				//file
+			}
+
+			foreach (var file in list.ToList())
+			{
+				foreach (var item in listItem)
+				{
+					if (new System.IO.FileInfo(file).Directory == new System.IO.FileInfo(item.ToString()).Directory)
+					{
+						list.Remove(file);
+						break;
+					}
+				}
+
+			}
+			foreach (var file in list.ToList())
+			{
+				listItem.Add(new System.IO.FileInfo(file).Directory.ToString());
+			}
+			listItem = listItem.Distinct().OrderBy(a => a.Count(b => b.Equals(@"\"))).ThenBy(a => a.ToString()).ToList();
+		}
+		catch (Exception ex)
+		{
+
+		}
+		finally
+		{
+
+			if (listItem.Count() != DirectoryListItems.Count()
+				|| listItem.Except(DirectoryListItems.ToList()).Count() > 0
+				|| DirectoryListItems.Except(listItem.ToList()).Count() > 0)
+
+			{
+				DirectoryListItems = new ObservableCollection<string>(listItem);
+			}
+		}
+
 	}
 
 	internal void RemoveDatasource(string text)

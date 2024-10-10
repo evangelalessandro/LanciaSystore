@@ -20,6 +20,12 @@ namespace LanciaSystore
 		public frmMain()
 		{
 			InitializeComponent();
+
+			this.Load += FrmMain_Load;
+		}
+
+		private void FrmMain_Load(object sender, EventArgs e)
+		{
 			this.FormClosing += Form1_FormClosing;
 
 			CheckEnableAvvia();
@@ -39,6 +45,7 @@ namespace LanciaSystore
 
 			this.Text = Assembly.GetExecutingAssembly().GetName().Name + " " + typeof(LanciaSystore.frmMain).Assembly.GetName().Version;
 		}
+
 		private void BindDatasource()
 		{
 			try

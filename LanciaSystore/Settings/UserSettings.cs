@@ -1,4 +1,6 @@
-﻿namespace LanciaSystore.Settings
+﻿using System.Collections.Generic;
+
+namespace LanciaSystore.Settings
 {
 	public class UserSettings
 	{
@@ -7,6 +9,7 @@
 		public string Master { get; set; }
 		public string CommonFolder { get; set; }
 		public string Directory { get; set; }
+
 
 	}
 

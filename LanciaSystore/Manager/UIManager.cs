@@ -63,6 +63,11 @@ internal class UIManager
 
 		}
 
+		foreach (var item in settPubl.DirectoryList)
+		{
+			DirectoryListItems.Add(item);
+
+		}
 
 		LoadCommonFolder();
 
@@ -347,6 +352,18 @@ internal class UIManager
 			{
 				DirectoryListItems = new ObservableCollection<string>(listItem);
 			}
+
+			var settingManager = new SettingManager();
+
+			var publicSett = settingManager.ReadPublicSetting();
+
+			if (publicSett.DirectoryList.Except(DirectoryListItems.ToList()).Count() > 0)
+			{
+				publicSett.DirectoryList = DirectoryListItems.ToList();
+				settingManager.SaveSetting(publicSett);
+			}
+
+
 		}
 
 	}

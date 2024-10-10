@@ -7,6 +7,8 @@ namespace LanciaSystore.Settings
 	{
 		public List<string> InstanzeSql { get; set; } = new List<string>() { };
 
+		public List<string> DirectoryList { get; set; } = new List<string>() { };
+
 		public List<DatiLancio> Lanci { get; set; } = new List<DatiLancio>() { };
 	}
 	public class DatiLancio

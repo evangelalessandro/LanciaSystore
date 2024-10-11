@@ -28,6 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
 			button1 = new System.Windows.Forms.Button();
 			txtDataSource = new System.Windows.Forms.TextBox();
 			lstDatabase = new System.Windows.Forms.ListBox();
@@ -49,123 +50,133 @@
 			btnRemove = new System.Windows.Forms.Button();
 			btnSearchTraslation = new System.Windows.Forms.Button();
 			btnTraduzioniPkt = new System.Windows.Forms.Button();
+			btnPacchettoSvn = new System.Windows.Forms.Button();
 			SuspendLayout();
 			// 
 			// button1
 			// 
-			button1.Location = new System.Drawing.Point(260, 49);
-			button1.Margin = new System.Windows.Forms.Padding(4);
+			button1.Location = new System.Drawing.Point(334, 64);
+			button1.Margin = new System.Windows.Forms.Padding(5);
 			button1.Name = "button1";
-			button1.Size = new System.Drawing.Size(88, 26);
+			button1.Size = new System.Drawing.Size(129, 62);
 			button1.TabIndex = 0;
 			button1.Text = "LeggiDb";
+			button1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			button1.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
 			button1.UseVisualStyleBackColor = true;
 			button1.Click += btnConnect_Click;
 			// 
 			// txtDataSource
 			// 
-			txtDataSource.Location = new System.Drawing.Point(28, 49);
-			txtDataSource.Margin = new System.Windows.Forms.Padding(4);
+			txtDataSource.Location = new System.Drawing.Point(32, 82);
+			txtDataSource.Margin = new System.Windows.Forms.Padding(5);
 			txtDataSource.Name = "txtDataSource";
-			txtDataSource.Size = new System.Drawing.Size(224, 23);
+			txtDataSource.Size = new System.Drawing.Size(292, 27);
 			txtDataSource.TabIndex = 1;
 			// 
 			// lstDatabase
 			// 
 			lstDatabase.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
+			lstDatabase.Font = new System.Drawing.Font("Segoe UI", 13.8F, System.Drawing.FontStyle.Bold);
 			lstDatabase.FormattingEnabled = true;
 			lstDatabase.HorizontalScrollbar = true;
-			lstDatabase.ItemHeight = 15;
-			lstDatabase.Location = new System.Drawing.Point(28, 98);
-			lstDatabase.Margin = new System.Windows.Forms.Padding(4);
+			lstDatabase.ItemHeight = 31;
+			lstDatabase.Location = new System.Drawing.Point(32, 168);
+			lstDatabase.Margin = new System.Windows.Forms.Padding(5);
 			lstDatabase.Name = "lstDatabase";
-			lstDatabase.Size = new System.Drawing.Size(301, 229);
+			lstDatabase.Size = new System.Drawing.Size(343, 562);
 			lstDatabase.TabIndex = 2;
 			lstDatabase.SelectedIndexChanged += lstDatabase_SelectedIndexChanged;
 			// 
 			// label1
 			// 
 			label1.AutoSize = true;
-			label1.Location = new System.Drawing.Point(28, 76);
-			label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+			label1.Location = new System.Drawing.Point(32, 138);
+			label1.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
 			label1.Name = "label1";
-			label1.Size = new System.Drawing.Size(55, 15);
+			label1.Size = new System.Drawing.Size(72, 20);
 			label1.TabIndex = 3;
 			label1.Text = "Database";
 			// 
 			// label2
 			// 
 			label2.AutoSize = true;
-			label2.Location = new System.Drawing.Point(382, 76);
-			label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+			label2.Location = new System.Drawing.Point(437, 138);
+			label2.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
 			label2.Name = "label2";
-			label2.Size = new System.Drawing.Size(43, 15);
+			label2.Size = new System.Drawing.Size(54, 20);
 			label2.TabIndex = 5;
 			label2.Text = "Master";
 			// 
 			// lstMaster
 			// 
 			lstMaster.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+			lstMaster.Font = new System.Drawing.Font("Segoe UI", 13.8F, System.Drawing.FontStyle.Bold);
 			lstMaster.FormattingEnabled = true;
 			lstMaster.HorizontalScrollbar = true;
-			lstMaster.ItemHeight = 15;
-			lstMaster.Location = new System.Drawing.Point(382, 98);
-			lstMaster.Margin = new System.Windows.Forms.Padding(4);
+			lstMaster.ItemHeight = 31;
+			lstMaster.Location = new System.Drawing.Point(437, 168);
+			lstMaster.Margin = new System.Windows.Forms.Padding(5);
 			lstMaster.Name = "lstMaster";
-			lstMaster.Size = new System.Drawing.Size(206, 229);
+			lstMaster.Size = new System.Drawing.Size(650, 562);
 			lstMaster.TabIndex = 4;
 			// 
 			// btnAvvia
 			// 
-			btnAvvia.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right;
-			btnAvvia.Location = new System.Drawing.Point(899, 354);
-			btnAvvia.Margin = new System.Windows.Forms.Padding(4);
+			btnAvvia.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
+			btnAvvia.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold);
+
+			btnAvvia.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			btnAvvia.Location = new System.Drawing.Point(1412, 650);
+			btnAvvia.Margin = new System.Windows.Forms.Padding(5);
 			btnAvvia.Name = "btnAvvia";
-			btnAvvia.Size = new System.Drawing.Size(88, 28);
+			btnAvvia.Size = new System.Drawing.Size(196, 80);
 			btnAvvia.TabIndex = 6;
-			btnAvvia.Text = "Avvia";
+			btnAvvia.Text = "AVVIA SYSTORE";
+			btnAvvia.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
 			btnAvvia.UseVisualStyleBackColor = true;
 			btnAvvia.Click += btnAvvia_Click;
 			// 
 			// lstCommonFolder
 			// 
 			lstCommonFolder.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right;
+			lstCommonFolder.Font = new System.Drawing.Font("Segoe UI", 13.8F, System.Drawing.FontStyle.Bold);
 			lstCommonFolder.FormattingEnabled = true;
 			lstCommonFolder.HorizontalScrollbar = true;
-			lstCommonFolder.ItemHeight = 15;
-			lstCommonFolder.Location = new System.Drawing.Point(681, 98);
-			lstCommonFolder.Margin = new System.Windows.Forms.Padding(4);
+			lstCommonFolder.ItemHeight = 31;
+			lstCommonFolder.Location = new System.Drawing.Point(1176, 168);
+			lstCommonFolder.Margin = new System.Windows.Forms.Padding(5);
 			lstCommonFolder.Name = "lstCommonFolder";
-			lstCommonFolder.Size = new System.Drawing.Size(201, 259);
+			lstCommonFolder.Size = new System.Drawing.Size(229, 562);
 			lstCommonFolder.TabIndex = 7;
 			// 
 			// label3
 			// 
 			label3.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
 			label3.AutoSize = true;
-			label3.Location = new System.Drawing.Point(677, 80);
-			label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+			label3.Location = new System.Drawing.Point(1176, 143);
+			label3.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
 			label3.Name = "label3";
-			label3.Size = new System.Drawing.Size(91, 15);
+			label3.Size = new System.Drawing.Size(112, 20);
 			label3.TabIndex = 8;
 			label3.Text = "CommonFolder";
 			// 
 			// cbodataSource
 			// 
 			cbodataSource.FormattingEnabled = true;
-			cbodataSource.Location = new System.Drawing.Point(356, 49);
-			cbodataSource.Margin = new System.Windows.Forms.Padding(4);
+			cbodataSource.Location = new System.Drawing.Point(475, 83);
+			cbodataSource.Margin = new System.Windows.Forms.Padding(5);
 			cbodataSource.Name = "cbodataSource";
-			cbodataSource.Size = new System.Drawing.Size(312, 23);
+			cbodataSource.Size = new System.Drawing.Size(356, 28);
 			cbodataSource.TabIndex = 9;
 			// 
 			// btnAddMaster
 			// 
 			btnAddMaster.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
-			btnAddMaster.Location = new System.Drawing.Point(604, 98);
-			btnAddMaster.Margin = new System.Windows.Forms.Padding(4);
+			btnAddMaster.Location = new System.Drawing.Point(1097, 168);
+			btnAddMaster.Margin = new System.Windows.Forms.Padding(5);
 			btnAddMaster.Name = "btnAddMaster";
-			btnAddMaster.Size = new System.Drawing.Size(60, 91);
+			btnAddMaster.Size = new System.Drawing.Size(69, 121);
 			btnAddMaster.TabIndex = 10;
 			btnAddMaster.Text = "Add Master";
 			btnAddMaster.UseVisualStyleBackColor = true;
@@ -174,77 +185,89 @@
 			// btnDebug
 			// 
 			btnDebug.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
-			btnDebug.Location = new System.Drawing.Point(811, 10);
-			btnDebug.Margin = new System.Windows.Forms.Padding(4);
+			btnDebug.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
+
+			btnDebug.Location = new System.Drawing.Point(1412, 13);
+			btnDebug.Margin = new System.Windows.Forms.Padding(5);
 			btnDebug.Name = "btnDebug";
-			btnDebug.Size = new System.Drawing.Size(176, 30);
+			btnDebug.Size = new System.Drawing.Size(201, 68);
 			btnDebug.TabIndex = 11;
 			btnDebug.Text = "Debug  = 1";
+			btnDebug.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
 			btnDebug.UseVisualStyleBackColor = true;
 			btnDebug.Click += btnDebug_Click;
 			// 
 			// btnDbUpdate
 			// 
 			btnDbUpdate.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
-			btnDbUpdate.Location = new System.Drawing.Point(900, 98);
-			btnDbUpdate.Margin = new System.Windows.Forms.Padding(4);
+			btnDbUpdate.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold);
+
+			btnDbUpdate.ImageAlign = System.Drawing.ContentAlignment.BottomLeft;
+			btnDbUpdate.Location = new System.Drawing.Point(1412, 168);
+			btnDbUpdate.Margin = new System.Windows.Forms.Padding(5);
 			btnDbUpdate.Name = "btnDbUpdate";
-			btnDbUpdate.Size = new System.Drawing.Size(88, 28);
+			btnDbUpdate.Size = new System.Drawing.Size(196, 63);
 			btnDbUpdate.TabIndex = 12;
-			btnDbUpdate.Text = "dbUpdate";
+			btnDbUpdate.Text = "DB UPDATE";
+			btnDbUpdate.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
 			btnDbUpdate.UseVisualStyleBackColor = true;
 			btnDbUpdate.Click += btnDbUpdate_Click;
 			// 
 			// btnLeggiDbCombo
 			// 
-			btnLeggiDbCombo.Location = new System.Drawing.Point(669, 48);
-			btnLeggiDbCombo.Margin = new System.Windows.Forms.Padding(4);
+			btnLeggiDbCombo.Location = new System.Drawing.Point(841, 64);
+			btnLeggiDbCombo.Margin = new System.Windows.Forms.Padding(5);
 			btnLeggiDbCombo.Name = "btnLeggiDbCombo";
-			btnLeggiDbCombo.Size = new System.Drawing.Size(88, 26);
+			btnLeggiDbCombo.Size = new System.Drawing.Size(140, 63);
 			btnLeggiDbCombo.TabIndex = 13;
 			btnLeggiDbCombo.Text = "LeggiDb";
+			btnLeggiDbCombo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			btnLeggiDbCombo.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
 			btnLeggiDbCombo.UseVisualStyleBackColor = true;
 			btnLeggiDbCombo.Click += btnLeggiDbCombo_Click;
 			// 
 			// btnControllaFileScompagnati
 			// 
 			btnControllaFileScompagnati.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
-			btnControllaFileScompagnati.Location = new System.Drawing.Point(897, 134);
-			btnControllaFileScompagnati.Margin = new System.Windows.Forms.Padding(4);
+			btnControllaFileScompagnati.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold);
+
+			btnControllaFileScompagnati.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			btnControllaFileScompagnati.Location = new System.Drawing.Point(1412, 251);
+			btnControllaFileScompagnati.Margin = new System.Windows.Forms.Padding(5);
 			btnControllaFileScompagnati.Name = "btnControllaFileScompagnati";
-			btnControllaFileScompagnati.Size = new System.Drawing.Size(88, 55);
+			btnControllaFileScompagnati.Size = new System.Drawing.Size(196, 89);
 			btnControllaFileScompagnati.TabIndex = 14;
-			btnControllaFileScompagnati.Text = "Controlla file scompagnati";
+			btnControllaFileScompagnati.Text = "Controlla file \r\nscompagnati";
+			btnControllaFileScompagnati.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
 			btnControllaFileScompagnati.UseVisualStyleBackColor = true;
 			btnControllaFileScompagnati.Click += btnControllaFileScompagnati_Click;
 			// 
 			// txtDirectory
 			// 
-			txtDirectory.Location = new System.Drawing.Point(108, 14);
-			txtDirectory.Margin = new System.Windows.Forms.Padding(4);
+			txtDirectory.Location = new System.Drawing.Point(123, 19);
+			txtDirectory.Margin = new System.Windows.Forms.Padding(5);
 			txtDirectory.Name = "txtDirectory";
-			txtDirectory.Size = new System.Drawing.Size(640, 23);
+			txtDirectory.Size = new System.Drawing.Size(731, 28);
 			txtDirectory.TabIndex = 15;
-			txtDirectory.Enabled = true;
-
 			// 
 			// label4
 			// 
 			label4.AutoSize = true;
-			label4.Location = new System.Drawing.Point(28, 17);
-			label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+			label4.Location = new System.Drawing.Point(32, 23);
+			label4.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
 			label4.Name = "label4";
-			label4.Size = new System.Drawing.Size(58, 15);
+			label4.Size = new System.Drawing.Size(73, 20);
 			label4.TabIndex = 16;
 			label4.Text = "Directory:";
 			// 
 			// btnLeggiFileCommon
 			// 
 			btnLeggiFileCommon.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
-			btnLeggiFileCommon.Location = new System.Drawing.Point(897, 196);
-			btnLeggiFileCommon.Margin = new System.Windows.Forms.Padding(4);
+			btnLeggiFileCommon.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold);
+			btnLeggiFileCommon.Location = new System.Drawing.Point(1412, 350);
+			btnLeggiFileCommon.Margin = new System.Windows.Forms.Padding(5);
 			btnLeggiFileCommon.Name = "btnLeggiFileCommon";
-			btnLeggiFileCommon.Size = new System.Drawing.Size(88, 55);
+			btnLeggiFileCommon.Size = new System.Drawing.Size(196, 46);
 			btnLeggiFileCommon.TabIndex = 17;
 			btnLeggiFileCommon.Text = "Leggi file Common";
 			btnLeggiFileCommon.UseVisualStyleBackColor = true;
@@ -252,22 +275,24 @@
 			// 
 			// btnRemove
 			// 
-			btnRemove.Location = new System.Drawing.Point(760, 48);
-			btnRemove.Margin = new System.Windows.Forms.Padding(4);
+			btnRemove.Location = new System.Drawing.Point(991, 65);
+			btnRemove.Margin = new System.Windows.Forms.Padding(5);
 			btnRemove.Name = "btnRemove";
-			btnRemove.Size = new System.Drawing.Size(87, 27);
+			btnRemove.Size = new System.Drawing.Size(147, 62);
 			btnRemove.TabIndex = 18;
 			btnRemove.Text = "Rimuovi";
+			btnRemove.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
 			btnRemove.UseVisualStyleBackColor = true;
 			btnRemove.Click += btnRemove_Click;
 			// 
 			// btnSearchTraslation
 			// 
 			btnSearchTraslation.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
-			btnSearchTraslation.Location = new System.Drawing.Point(897, 259);
-			btnSearchTraslation.Margin = new System.Windows.Forms.Padding(4);
+			btnSearchTraslation.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold);
+			btnSearchTraslation.Location = new System.Drawing.Point(1412, 406);
+			btnSearchTraslation.Margin = new System.Windows.Forms.Padding(5);
 			btnSearchTraslation.Name = "btnSearchTraslation";
-			btnSearchTraslation.Size = new System.Drawing.Size(88, 41);
+			btnSearchTraslation.Size = new System.Drawing.Size(198, 40);
 			btnSearchTraslation.TabIndex = 19;
 			btnSearchTraslation.Text = "Cerca traduzioni";
 			btnSearchTraslation.UseVisualStyleBackColor = true;
@@ -276,20 +301,37 @@
 			// btnTraduzioniPkt
 			// 
 			btnTraduzioniPkt.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
-			btnTraduzioniPkt.Location = new System.Drawing.Point(897, 308);
-			btnTraduzioniPkt.Margin = new System.Windows.Forms.Padding(4);
+			btnTraduzioniPkt.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold);
+			btnTraduzioniPkt.Location = new System.Drawing.Point(1412, 456);
+			btnTraduzioniPkt.Margin = new System.Windows.Forms.Padding(5);
 			btnTraduzioniPkt.Name = "btnTraduzioniPkt";
-			btnTraduzioniPkt.Size = new System.Drawing.Size(88, 41);
+			btnTraduzioniPkt.Size = new System.Drawing.Size(196, 44);
 			btnTraduzioniPkt.TabIndex = 20;
 			btnTraduzioniPkt.Text = "Cerca traduzioni pkt";
 			btnTraduzioniPkt.UseVisualStyleBackColor = true;
 			btnTraduzioniPkt.Click += btnTraduzioniPkt_Click;
 			// 
+			// btnPacchettoSvn
+			// 
+			btnPacchettoSvn.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
+			btnPacchettoSvn.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold);
+
+			btnPacchettoSvn.Location = new System.Drawing.Point(1412, 510);
+			btnPacchettoSvn.Margin = new System.Windows.Forms.Padding(5);
+			btnPacchettoSvn.Name = "btnPacchettoSvn";
+			btnPacchettoSvn.Size = new System.Drawing.Size(198, 116);
+			btnPacchettoSvn.TabIndex = 21;
+			btnPacchettoSvn.Text = "Fai copia in cartella destinazione della lista file svn";
+			btnPacchettoSvn.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			btnPacchettoSvn.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
+			btnPacchettoSvn.UseVisualStyleBackColor = true;
+			// 
 			// frmMain
 			// 
-			AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+			AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
 			AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			ClientSize = new System.Drawing.Size(998, 395);
+			ClientSize = new System.Drawing.Size(1626, 778);
+			Controls.Add(btnPacchettoSvn);
 			Controls.Add(btnTraduzioniPkt);
 			Controls.Add(btnSearchTraslation);
 			Controls.Add(btnRemove);
@@ -311,7 +353,8 @@
 			Controls.Add(lstDatabase);
 			Controls.Add(txtDataSource);
 			Controls.Add(button1);
-			Margin = new System.Windows.Forms.Padding(4);
+			Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
+			Margin = new System.Windows.Forms.Padding(5);
 			Name = "frmMain";
 			Text = "Systore Launcher";
 			ResumeLayout(false);
@@ -341,6 +384,7 @@
 		private System.Windows.Forms.Button btnRemove;
 		private System.Windows.Forms.Button btnSearchTraslation;
 		private System.Windows.Forms.Button btnTraduzioniPkt;
+		private System.Windows.Forms.Button btnPacchettoSvn;
 	}
 }
 

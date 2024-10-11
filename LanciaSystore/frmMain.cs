@@ -44,6 +44,14 @@ namespace LanciaSystore
 			btnLeggiFileCommon.Enabled = false;
 
 			this.Text = Assembly.GetExecutingAssembly().GetName().Name + " " + typeof(LanciaSystore.frmMain).Assembly.GetName().Version;
+
+			btnPacchettoSvn.Click += BtnPacchettoSvn_Click;
+
+		}
+
+		private void BtnPacchettoSvn_Click(object sender, EventArgs e)
+		{
+			ManagePacchettoSvn.CreaPacchetto(Manager.Directory);
 		}
 
 		private void BindDatasource()

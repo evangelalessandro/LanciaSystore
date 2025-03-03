@@ -12,6 +12,7 @@ namespace LanciaSystore
 {
 	public partial class frmMain : Form
 	{
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		internal UIManager Manager { get; set; } = new();
 
 		/// <summary>

@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -115,7 +116,11 @@ internal class UIManager
 		var location = new Uri(Assembly.GetEntryAssembly().GetName().CodeBase);
 		return new FileInfo(location.AbsolutePath).Directory.FullName;
 	}
-	public string Directory { get; set; }
+	public string Directory
+	{
+		get;
+		set;
+	}
 	public void ReadDataInstanzaSql(string dataSourceName)
 	{
 		ListDatabase.Clear();
@@ -289,10 +294,14 @@ internal class UIManager
 	private void UpdateDirectoryList()
 	{
 		Cursor.Current = Cursors.WaitCursor;
-		var listItem = DirectoryListItems.ToList();
+		var listItem = DirectoryListItems.ToList().Where(a => CheckExistsFolder(a)).ToList();
+
+
 		try
 		{
-			var list = System.IO.Directory.GetDirectories(Directory.Trim(), "Database", System.IO.SearchOption.AllDirectories).ToList();
+			if (!CheckExistsFolder(Directory.Trim()) && listItem.Count > 0)
+				Directory = listItem.First();
+			var list = System.IO.Directory.GetDirectories(Directory.Trim(), "Database", System.IO.SearchOption.AllDirectories).OrderBy(a => a).ToList();
 
 			foreach (var file in list.ToList())
 			{
@@ -336,7 +345,13 @@ internal class UIManager
 			{
 				listItem.Add(new System.IO.FileInfo(file).Directory.ToString());
 			}
-			listItem = listItem.Distinct().OrderBy(a => a.Count(b => b.Equals(@"\"))).ThenBy(a => a.ToString()).ToList();
+			listItem = listItem.OrderBy(dir => dir.Count(c => c == '\\')).ThenBy(dir => dir).Distinct().ToList();
+
+
+			foreach (var dir in listItem)
+			{
+				Debug.WriteLine(dir);
+			}
 		}
 		catch (Exception ex)
 		{
@@ -365,6 +380,12 @@ internal class UIManager
 
 
 		}
+
+	}
+	private bool CheckExistsFolder(string folder)
+	{
+
+		return System.IO.Directory.Exists(folder);
 
 	}
 

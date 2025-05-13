@@ -26,8 +26,7 @@
 		/// Metodo necessario per il supporto della finestra di progettazione. Non modificare
 		/// il contenuto del metodo con l'editor di codice.
 		/// </summary>
-		private void InitializeComponent()
-		{
+		private void InitializeComponent() {
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
 			button1 = new System.Windows.Forms.Button();
 			txtDataSource = new System.Windows.Forms.TextBox();
@@ -51,6 +50,7 @@
 			btnSearchTraslation = new System.Windows.Forms.Button();
 			btnTraduzioniPkt = new System.Windows.Forms.Button();
 			btnPacchettoSvn = new System.Windows.Forms.Button();
+			btnCartella = new System.Windows.Forms.Button();
 			SuspendLayout();
 			// 
 			// button1
@@ -81,7 +81,6 @@
 			lstDatabase.Font = new System.Drawing.Font("Segoe UI", 13.8F, System.Drawing.FontStyle.Bold);
 			lstDatabase.FormattingEnabled = true;
 			lstDatabase.HorizontalScrollbar = true;
-			lstDatabase.ItemHeight = 31;
 			lstDatabase.Location = new System.Drawing.Point(32, 168);
 			lstDatabase.Margin = new System.Windows.Forms.Padding(5);
 			lstDatabase.Name = "lstDatabase";
@@ -115,7 +114,6 @@
 			lstMaster.Font = new System.Drawing.Font("Segoe UI", 13.8F, System.Drawing.FontStyle.Bold);
 			lstMaster.FormattingEnabled = true;
 			lstMaster.HorizontalScrollbar = true;
-			lstMaster.ItemHeight = 31;
 			lstMaster.Location = new System.Drawing.Point(437, 168);
 			lstMaster.Margin = new System.Windows.Forms.Padding(5);
 			lstMaster.Name = "lstMaster";
@@ -144,7 +142,6 @@
 			lstCommonFolder.Font = new System.Drawing.Font("Segoe UI", 13.8F, System.Drawing.FontStyle.Bold);
 			lstCommonFolder.FormattingEnabled = true;
 			lstCommonFolder.HorizontalScrollbar = true;
-			lstCommonFolder.ItemHeight = 31;
 			lstCommonFolder.Location = new System.Drawing.Point(1095, 168);
 			lstCommonFolder.Margin = new System.Windows.Forms.Padding(5);
 			lstCommonFolder.Name = "lstCommonFolder";
@@ -246,6 +243,7 @@
 			// 
 			// txtDirectory
 			// 
+			txtDirectory.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			txtDirectory.Location = new System.Drawing.Point(123, 19);
 			txtDirectory.Margin = new System.Windows.Forms.Padding(5);
 			txtDirectory.Name = "txtDirectory";
@@ -329,11 +327,25 @@
 			btnPacchettoSvn.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
 			btnPacchettoSvn.UseVisualStyleBackColor = true;
 			// 
+			// btnCartella
+			// 
+			btnCartella.Location = new System.Drawing.Point(864, 13);
+			btnCartella.Margin = new System.Windows.Forms.Padding(5);
+			btnCartella.Name = "btnCartella";
+			btnCartella.Size = new System.Drawing.Size(154, 42);
+			btnCartella.TabIndex = 22;
+			btnCartella.Text = "Leggi cartella";
+			btnCartella.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			btnCartella.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
+			btnCartella.UseVisualStyleBackColor = true;
+			btnCartella.Click += btnCartella_Click;
+			// 
 			// frmMain
 			// 
 			AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
 			AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			ClientSize = new System.Drawing.Size(1545, 781);
+			Controls.Add(btnCartella);
 			Controls.Add(btnPacchettoSvn);
 			Controls.Add(btnTraduzioniPkt);
 			Controls.Add(btnSearchTraslation);
@@ -388,6 +400,7 @@
 		private System.Windows.Forms.Button btnSearchTraslation;
 		private System.Windows.Forms.Button btnTraduzioniPkt;
 		private System.Windows.Forms.Button btnPacchettoSvn;
+		private System.Windows.Forms.Button btnCartella;
 	}
 }
 

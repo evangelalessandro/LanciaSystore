@@ -12,19 +12,45 @@ using System.Windows.Forms;
 namespace LanciaSystore {
 	public partial class frmMain : Form {
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		internal UIManager Manager { get; set; } = new();
-
+		internal UIManager Manager { get; set; }
+		private frmProgress _frm;
 		/// <summary>
 		/// Form principale
 		/// </summary>
 		public frmMain() {
 			InitializeComponent();
 
+
 			this.Load += FrmMain_Load;
+			txtDirectory.SelectedIndexChanged += (a, e) => {
+				Manager.DirectoryProgettoCorrente = txtDirectory.Text;
+			};
+		}
+
+		private void Manager_ProgressUpdate(object sender, ProgressUpdateEventArgs e) {
+
+			if (_frm == null || _frm.IsDisposed) {
+				_frm = new frmProgress();
+				_frm.Show(this);
+			}
+
+
+			_frm.UpdateProgress(e.Percentage, e.Message);
+
+			if (e.Percentage == 100) {
+				_frm.Close();
+				_frm = null;
+			}
+
 		}
 
 		private void FrmMain_Load(object sender, EventArgs e) {
 			this.FormClosing += Form1_FormClosing;
+
+			Manager = new();
+			Manager.ProgressUpdate += Manager_ProgressUpdate;
+
+
 
 			CheckEnableAvvia();
 			BindDatasource();
@@ -34,10 +60,10 @@ namespace LanciaSystore {
 				Debug.WriteLine("Changed:" + e.PropertyName);
 			};
 
-			txtDirectory.Text = Manager.Directory;
+			txtDirectory.Text = Manager.DirectoryProgettoCorrente;
 
 
-			Manager.Directory = txtDirectory.Text;
+			Manager.DirectoryProgettoCorrente = txtDirectory.Text;
 			btnLeggiFileCommon.Enabled = false;
 
 			this.Text = Assembly.GetExecutingAssembly().GetName().Name + " " + typeof(LanciaSystore.frmMain).Assembly.GetName().Version;
@@ -47,7 +73,7 @@ namespace LanciaSystore {
 		}
 
 		private void BtnPacchettoSvn_Click(object sender, EventArgs e) {
-			ManagePacchettoSvn.CreaPacchetto(Manager.Directory);
+			ManagePacchettoSvn.CreaPacchetto(Manager.DirectoryProgettoCorrente);
 		}
 
 		private void BindDatasource() {
@@ -117,7 +143,7 @@ namespace LanciaSystore {
 
 
 		private void btnAvvia_Click(object sender, EventArgs e) {
-			var exe = new Exe_SystemLogisticsApp4(Manager.Directory);
+			var exe = new Exe_SystemLogisticsApp4(Manager.DirectoryProgettoCorrente);
 			exe.StrartProc(Manager);
 
 		}
@@ -157,7 +183,7 @@ namespace LanciaSystore {
 
 		private async void btnLeggiFileCommon_Click(object sender, EventArgs e) {
 			btnLeggiFileCommon.Enabled = false;
-			var fileCom = new FileCommonManager(Manager.SelectedDataSource, Manager.SelectedDb, Manager.Directory + @"\" + lstCommonFolder.Text);
+			var fileCom = new FileCommonManager(Manager.SelectedDataSource, Manager.SelectedDb, Manager.DirectoryProgettoCorrente + @"\" + lstCommonFolder.Text);
 			await fileCom.ManageCommonFile();
 
 			btnLeggiFileCommon.Enabled = true;
@@ -189,8 +215,8 @@ namespace LanciaSystore {
 				dialog.SelectedPath = txtDirectory.Text;
 
 				if (dialog.ShowDialog() == DialogResult.OK) {
-					Manager.Directory = dialog.SelectedPath;
-					Manager.RefreshDbList();
+					Manager.DirectoryRoot = dialog.SelectedPath;
+
 				}
 			}
 

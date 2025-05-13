@@ -20,25 +20,21 @@ using static System.Formats.Asn1.AsnWriter;
 
 namespace LanciaSystore.Manager;
 
-internal class FileCommonManagerPKT
-{
+internal class FileCommonManagerPKT {
 	public static List<string> FileCommonList { get; set; } = new List<string>();
 	private UIManager _manager { get; set; }
 
 
-	public FileCommonManagerPKT(UIManager manager)
-	{
+	public FileCommonManagerPKT(UIManager manager) {
 		_manager = manager;
 	}
 
 
 
-	public async Task<int> Exec()
-	{
+	public async Task<int> Exec() {
 		FileCommonList.Clear();
 
-		foreach (var file in Directory.GetFiles(Path.Combine(_manager.Directory, _manager.SelectedCommon), "*PKT*.xml"))
-		{
+		foreach (var file in Directory.GetFiles(Path.Combine(_manager.DirectoryProgettoCorrente, _manager.SelectedCommon), "*PKT*.xml")) {
 			FileCommonList.Add(File.ReadAllText(file));
 		}
 
@@ -50,12 +46,10 @@ internal class FileCommonManagerPKT
 
 		List<string> listMessage = new List<string>();
 
-		foreach (var item in FileCommonList)
-		{
+		foreach (var item in FileCommonList) {
 
 
-			foreach (Match match in reg.Matches(item))
-			{
+			foreach (Match match in reg.Matches(item)) {
 				//match.Value
 
 				listMessage.Add(match.Value.Remove(0, 2).Replace("}", ""));
@@ -66,8 +60,7 @@ internal class FileCommonManagerPKT
 
 		listMessage = listMessage.Distinct().ToList();
 
-		foreach (var item in listMessage)
-		{
+		foreach (var item in listMessage) {
 			Debug.Print(item);
 		}
 

@@ -18,66 +18,47 @@ using System.Security.Policy;
 using static System.Net.Mime.MediaTypeNames;
 using System.Text.RegularExpressions;
 
-namespace LanciaSystore.Manager {
-	internal class NewSpManager {
+namespace LanciaSystore.Manager
+{
+	internal class NewSpManager
+	{
 
-		internal static async Task CreateNewFileSp(UIManager manager) {
+		internal static async Task CreateNewFileSp(UIManager manager)
+		{
 			await CreateNewFileSp(manager.SelectedDataSource, manager.SelectedDb, manager.DirectoryProgettoCorrente);
 
 			return;
 		}
 
-		private static async Task CreateNewFileSp(string datasource, string database, string folder) {
+		private static async Task CreateNewFileSp(string datasource, string database, string folder)
+		{
 			var listSpFromDb = new ListSpFunctionManager(database, datasource);
 
 			folder = Path.Combine(folder, "Database");
 			var folders = Directory.GetDirectories(folder, "WS*");
 
-			foreach (var folderDb in folders.Where(a => a.EndsWith(database))) {
-
-				var files = Directory.GetFiles(folderDb, "*.sql", SearchOption.AllDirectories);
-
-
-				await foreach (var item in files.Where(a => !a.Contains(@"\CreazioneDatabase\") && !a.Contains(@"\Update\") && !a.Contains(@"\Percorsi\") && !a.Contains(@"\Path\")).ToAsyncEnumerable()) {
-					var file = item.Split(@"\").Last().Replace("dbo.", "").Replace(".sql", ""); ;
-					var proc = listSpFromDb.List.FirstOrDefault(a => a.Name.Equals(file, StringComparison.InvariantCultureIgnoreCase));
-					if (proc != null) {
-						proc.File = item;
-						try {
-							File.SetAttributes(item, FileAttributes.Normal);
-							//var cont = System.IO.File.ReadAllText(item);
-							//bool removerBoom = true;
-							//if (!GetFileEncodingUTF8(item) || removerBoom)
-							//{
-
-							//	var contTowrite = cont;
-
-							//	System.IO.File.WriteAllText(item, contTowrite, new UTF8Encoding(false));
-							//}
-						} catch (Exception) {
-
-						}
-
-					} else {
-
-					}
-				}
+			await foreach (var folderDb in folders.Where(a => a.EndsWith(database)).ToAsyncEnumerable())
+			{
+				await CheckFolder(listSpFromDb, folderDb);
 
 			}
+
 			var listEmpty = await listSpFromDb.List.Where(a => a.File == "").ToAsyncEnumerable().ToListAsync();
-			if (listEmpty.Count > 0) {
-
-
+			if (listEmpty.Count > 0)
+			{
 				var folderDest = "";
 
-				foreach (var item in listEmpty) {
+				await foreach (var item in listEmpty.ToAsyncEnumerable())
+				{
 					folderDest = "";
-					for (var i = item.Name.Length - 1; i > 2; i--) {
+					for (var i = item.Name.Length - 1; i > 2; i--)
+					{
 						var name = item.Name.Substring(0, i);
 
 						var finded = listSpFromDb.List.Where(a => a.Name.StartsWith(name) && a.File != "").FirstOrDefault();
 
-						if (finded != null) {
+						if (finded != null)
+						{
 							folderDest = new System.IO.FileInfo(finded.File).Directory.FullName;
 							break;
 
@@ -88,18 +69,51 @@ namespace LanciaSystore.Manager {
 					File.WriteAllText(Path.Combine(folderDest, "dbo." + item.Name + ".sql"), item.Content, new UTF8Encoding());
 				}
 				MessageBox.Show("Trovate  " + listEmpty.Count().ToString() + " sp, generati i nuovi file e messi nelle cartelle ", "Info", MessageBoxButtons.OK, icon: MessageBoxIcon.Exclamation);
-			} else {
+			}
+			else
+			{
 
 				MessageBox.Show("Niente di nuovo ", "Info", MessageBoxButtons.OK, icon: MessageBoxIcon.Information);
 			}
 
 		}
+
+		private async static Task CheckFolder(ListSpFunctionManager listSpFromDb, string folderDb)
+		{
+			var files = Directory.GetFiles(folderDb, "*.sql", SearchOption.AllDirectories);
+
+
+			foreach (var item in files.Where(a => !a.Contains(@"\CreazioneDatabase\") && !a.Contains(@"\Update\") &&
+			!a.Contains(@"\Percorsi\") && !a.Contains(@"\Path\")))
+			{
+
+				var file = item.Split(@"\").Last();//.Replace("dbo.", "").Replace(".sql", ""); ;
+				var proc = listSpFromDb.List.FirstOrDefault(a => a.Name.Equals(file, StringComparison.InvariantCultureIgnoreCase));
+				if (proc != null)
+				{
+					proc.File = item;
+					try
+					{
+						File.SetAttributes(item, FileAttributes.Normal);
+
+					}
+					catch (Exception)
+					{
+
+					}
+
+				}
+
+			}
+		}
+
 		//private static string RemoveBom(string text)
 		//{
 		//	text = Regex.Replace(text, @"^\xEF\xBB\xBF\", string.Empty);
 		//	return text;
 		//}
-		public static bool GetFileEncodingUTF8(string srcFile) {
+		public static bool GetFileEncodingUTF8(string srcFile)
+		{
 			// *** Use Default of Encoding.Default (Ansi CodePage)
 			Encoding enc = Encoding.Default;
 
@@ -115,10 +129,12 @@ namespace LanciaSystore.Manager {
 		}
 
 	}
-	internal class SqlProcedureFunction {
+	internal class SqlProcedureFunction
+	{
 
 
-		public SqlProcedureFunction(string name, string body, string type) {
+		public SqlProcedureFunction(string name, string body, string type)
+		{
 			Name = name;
 			Content = body;
 			Type = type;
@@ -129,7 +145,8 @@ namespace LanciaSystore.Manager {
 		public string Type { get; set; } = "";
 		public string File { get; set; } = "";
 
-		public override string ToString() {
+		public override string ToString()
+		{
 			return Name + " " + Type;
 		}
 

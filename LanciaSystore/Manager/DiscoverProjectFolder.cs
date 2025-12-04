@@ -57,6 +57,8 @@ namespace LanciaSystore.Manager {
 					try {
 						if (System.IO.Directory.GetFiles(root, "SystemLogisticsApp4.exe", System.IO.SearchOption.TopDirectoryOnly).Length == 0)
 							list.Remove(root);
+						else
+							Debug.WriteLine(dir);
 					} catch (Exception) {
 
 						list.Remove(root);

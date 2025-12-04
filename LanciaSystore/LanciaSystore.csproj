@@ -9,6 +9,7 @@
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<BaseIntermediateOutputPath />
 		<StartupObject>LanciaSystore.Program</StartupObject>
+		<ApplicationIcon>Resources\freepik__server_database_utility.ico</ApplicationIcon>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 	  <Deterministic>False</Deterministic>
@@ -18,6 +19,9 @@
 	</PropertyGroup>
 	<ItemGroup>
 	  <Compile Remove="ISettingsReader.cs" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Content Include="Resources\freepik__server_database_utility.ico" />
 	</ItemGroup>
 	<ItemGroup>
 	  <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />

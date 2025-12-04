@@ -26,7 +26,8 @@
 		/// Metodo necessario per il supporto della finestra di progettazione. Non modificare
 		/// il contenuto del metodo con l'editor di codice.
 		/// </summary>
-		private void InitializeComponent() {
+		private void InitializeComponent()
+		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
 			button1 = new System.Windows.Forms.Button();
 			txtDataSource = new System.Windows.Forms.TextBox();

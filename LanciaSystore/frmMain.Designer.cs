@@ -245,10 +245,11 @@
 			// txtDirectory
 			// 
 			txtDirectory.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			txtDirectory.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
 			txtDirectory.Location = new System.Drawing.Point(123, 19);
 			txtDirectory.Margin = new System.Windows.Forms.Padding(5);
 			txtDirectory.Name = "txtDirectory";
-			txtDirectory.Size = new System.Drawing.Size(731, 28);
+			txtDirectory.Size = new System.Drawing.Size(731, 36);
 			txtDirectory.TabIndex = 15;
 			// 
 			// label4

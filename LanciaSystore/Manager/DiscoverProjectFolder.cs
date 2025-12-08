@@ -6,24 +6,30 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static LanciaSystore.Manager.UIManager;
 
-namespace LanciaSystore.Manager {
-	internal class DiscoverProjectFolder {
+namespace LanciaSystore.Manager
+{
+	internal class DiscoverProjectFolder
+	{
 		// Evento ProgressUpdate
 		public event EventHandler<ProgressUpdateEventArgs> ProgressUpdate;
 
-		private bool CheckExistsFolder(string folder) {
+		private bool CheckExistsFolder(string folder)
+		{
 
 			return System.IO.Directory.Exists(folder);
 
 		}
 		// Metodo per sollevare l'evento
-		protected virtual void OnProgressUpdate(int percentage, string message = "") {
+		protected virtual void OnProgressUpdate(int percentage, string message = "")
+		{
 			ProgressUpdate?.Invoke(this, new ProgressUpdateEventArgs(percentage, message));
 		}
-		internal void DiscoverySubFolder(ref ObservableCollection<string> directoryListItems, string currentFolder) {
+		internal void DiscoverySubFolder(ref ObservableCollection<ProjectItem> directoryListItems, string currentFolder)
+		{
 			Cursor.Current = Cursors.WaitCursor;
-			var listItem = directoryListItems.ToList().Where(a => CheckExistsFolder(a)).ToList();
+			var listItem = directoryListItems.ToList().Where(a => CheckExistsFolder(a.Percorso)).ToList();
 
 
 
@@ -32,21 +38,25 @@ namespace LanciaSystore.Manager {
 			int i = 0;
 			int count = 0;
 			this.OnProgressUpdate(i, "Aggiorno la lista delle cartelle");
-			try {
+			try
+			{
 
 				if (!CheckExistsFolder(currentFolder.Trim()) && listItem.Count > 0)
-					currentFolder = listItem.First();
+					currentFolder = listItem.First().Percorso;
 				var list = System.IO.Directory.GetDirectories(currentFolder.Trim(), "Database", System.IO.SearchOption.AllDirectories).OrderBy(a => a).ToList();
 				count = list.Count();
-				foreach (var file in list.ToList()) {
+				foreach (var file in list.ToList())
+				{
 					//TaskbarManager.Instance.SetProgressValue(i, list.Count());
 
-					if (i > 0) {
+					if (i > 0)
+					{
 						var perc = 100.0 / count * (i);
 						if (perc > 100)
 							perc = 100;
 						this.OnProgressUpdate((int)perc, file);
-					} else
+					}
+					else
 						this.OnProgressUpdate(0, file);
 					var dir = new System.IO.DirectoryInfo(file);
 					var lst = dir.FullName.LastIndexOf(dir.Name);
@@ -54,12 +64,15 @@ namespace LanciaSystore.Manager {
 					list.Remove(file);
 					list.Add(root);
 
-					try {
+					try
+					{
 						if (System.IO.Directory.GetFiles(root, "SystemLogisticsApp4.exe", System.IO.SearchOption.TopDirectoryOnly).Length == 0)
 							list.Remove(root);
 						else
 							Debug.WriteLine(dir);
-					} catch (Exception) {
+					}
+					catch (Exception)
+					{
 
 						list.Remove(root);
 					}
@@ -68,42 +81,54 @@ namespace LanciaSystore.Manager {
 					//file
 				}
 
-				foreach (var file in list.ToList()) {
-					foreach (var item in listItem) {
-						if (new System.IO.FileInfo(file).Directory == new System.IO.FileInfo(item.ToString()).Directory) {
+				foreach (var file in list.ToList())
+				{
+					foreach (var item in listItem)
+					{
+						if (new System.IO.FileInfo(file).Directory == new System.IO.FileInfo(item.ToString()).Directory)
+						{
 							list.Remove(file);
 							break;
 						}
 					}
 
 				}
-				foreach (var file in list.ToList()) {
-					listItem.Add(new System.IO.FileInfo(file).Directory.ToString());
+				foreach (var file in list.ToList())
+				{
+					listItem.Add(new ProjectItem(new System.IO.FileInfo(file).Directory.ToString()));
 				}
-				listItem = listItem.OrderBy(dir => dir.Count(c => c == '\\')).ThenBy(dir => dir).Distinct().ToList();
+				listItem = listItem.OrderBy(dir => dir.NomeProgetto).ThenBy(dir => dir).Distinct().ToList();
 
 
-				foreach (var dir in listItem) {
+				foreach (var dir in listItem)
+				{
 					Debug.WriteLine(dir);
 				}
-			} catch (Exception ex) {
+			}
+			catch (Exception ex)
+			{
 
-			} finally {
+			}
+			finally
+			{
 
 				if (listItem.Count() != directoryListItems.Count()
 					|| listItem.Except(directoryListItems.ToList()).Count() > 0
-					|| directoryListItems.Except(listItem.ToList()).Count() > 0) {
-					directoryListItems = new ObservableCollection<string>(listItem);
+					|| directoryListItems.Except(listItem.ToList()).Count() > 0)
+				{
+					directoryListItems = new ObservableCollection<ProjectItem>(listItem);
 				}
 
 				var settingManager = new SettingManager();
 
 				var publicSett = settingManager.ReadPublicSetting();
 
-				if (publicSett.DirectoryList.Except(directoryListItems.ToList()).Count() > 0
-					|| publicSett.DirectoryList.Count() != directoryListItems.Count()
-					) {
-					publicSett.DirectoryList = directoryListItems.ToList();
+				var newDirectoryList = directoryListItems.Select(x => x.Percorso).ToList();
+				if (publicSett.DirectoryList.Except(newDirectoryList).Count() > 0
+					|| publicSett.DirectoryList.Count() != newDirectoryList.Count
+					)
+				{
+					publicSett.DirectoryList = newDirectoryList;
 					settingManager.SaveSetting(publicSett);
 				}
 				this.OnProgressUpdate(100);

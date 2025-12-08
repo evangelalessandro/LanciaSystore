@@ -17,7 +17,8 @@ using System.Windows.Forms;
 namespace LanciaSystore.Manager;
 
 [AddINotifyPropertyChangedInterface]
-internal class UIManager {
+internal class UIManager
+{
 	TestConnessione _testConn;
 	public ObservableCollection<string> ListDataSource { get; set; } = new();
 
@@ -31,18 +32,21 @@ internal class UIManager {
 	public event EventHandler<ProgressUpdateEventArgs> ProgressUpdate;
 
 	// Metodo per sollevare l'evento
-	protected virtual void OnProgressUpdate(int percentage, string message = "") {
+	protected virtual void OnProgressUpdate(int percentage, string message = "")
+	{
 		ProgressUpdate?.Invoke(this, new ProgressUpdateEventArgs(percentage, message));
 	}
 
 
-	public string SelectedDb {
+	public string SelectedDb
+	{
 		get;
 		set;
 	}
 	public string SelectedDataSource { get; set; }
 
-	public string SelectedMaster {
+	public string SelectedMaster
+	{
 		get;
 		set;
 	}
@@ -52,7 +56,8 @@ internal class UIManager {
 
 	public event EventHandler RealoadBind;
 
-	public UIManager() {
+	public UIManager()
+	{
 
 		var settingManager = new SettingManager();
 		var settPrivate = settingManager.ReadSetting();
@@ -66,48 +71,69 @@ internal class UIManager {
 		SelectedDataSource = settPrivate.InstanzaSql;
 
 		var settPubl = settingManager.ReadPublicSetting();
-		foreach (var item in settPubl.InstanzeSql) {
+		foreach (var item in settPubl.InstanzeSql)
+		{
 			ListDataSource.Add(item);
 
 		}
 
-		foreach (var item in settPubl.DirectoryList) {
-			DirectoryListItems.Add(item);
+		foreach (var item in settPubl.DirectoryList)
+		{
+			DirectoryListItems.Add(new ProjectItem(item));
 
 		}
 
-		LoadCommonFolder();
+		LoadCommonFolder(DirectoryProgettoCorrente);
 
-		if (string.IsNullOrEmpty(SelectedDataSource)) {
-			if (ListDataSource.Count > 0) {
+		if (string.IsNullOrEmpty(SelectedDataSource))
+		{
+			if (ListDataSource.Count > 0)
+			{
 				SelectedDataSource = ListDataSource.FirstOrDefault();
 			}
 		}
-		if (SelectedDataSource.Length > 0) {
+		if (SelectedDataSource.Length > 0)
+		{
 			ReadDataInstanzaSql(SelectedDataSource);
 
-			if (ListDatabase.Count >= 0 && SelectedDb == "") {
+			if (ListDatabase.Count >= 0 && SelectedDb == "")
+			{
 				SelectedDb = settPrivate.Database;
 			}
 
-			if (ListMaster.Count >= 0) {
+			if (ListMaster.Count >= 0)
+			{
 				SelectedMaster = settPrivate.Master;
 			}
-			if (ListCommonFolder.Count >= 0) {
+			if (ListCommonFolder.Count >= 0)
+			{
 				SelectedCommon = settPrivate.CommonFolder;
 			}
 		}
 		var notify = this as INotifyPropertyChanged;
-		if (notify != null) {
-			notify.PropertyChanged += (a, b) => {
-				if (b.PropertyName.Contains("DirectoryRoot", StringComparison.InvariantCultureIgnoreCase)) {
-					LoadCommonFolder();
-					RefreshDbList();
+		if (notify != null)
+		{
+			notify.PropertyChanged += (a, b) =>
+			{
+				var list = this.DirectoryListItems.Where(a => a.NomeProgetto == DirectoryProgettoCorrente).ToList();
+				var loadCommon = false;
+				if (b.PropertyName.Contains("DirectoryRoot", StringComparison.InvariantCultureIgnoreCase))
+				{
+					loadCommon = true;
+
 					DiscoverySubFolder();
 				}
-				if (b.PropertyName.Contains("DirectoryProgettoCorrente", StringComparison.InvariantCultureIgnoreCase)) {
-					LoadCommonFolder();
-					RefreshDbList();
+				if (b.PropertyName.Contains("DirectoryProgettoCorrente", StringComparison.InvariantCultureIgnoreCase))
+				{
+					loadCommon = true;
+
+
+
+				}
+				if (list.Count() > 0 && loadCommon)
+				{
+					LoadCommonFolder(list.First().Percorso);
+					RefreshDbList(list.First().Percorso);
 				}
 
 
@@ -117,34 +143,46 @@ internal class UIManager {
 			};
 		}
 	}
-	private static string GetExecutingDirectoryName() {
+	private static string GetExecutingDirectoryName()
+	{
 		var location = new Uri(Assembly.GetEntryAssembly().GetName().CodeBase);
 		return new FileInfo(location.AbsolutePath).Directory.FullName;
 	}
-	public string DirectoryProgettoCorrente {
+	public string DirectoryProgettoCorrente
+	{
 		get;
 		set;
 	}
+	public string ProgettoCorrente
+	{
+		get;
+		set;
+	}
+
 	/// <summary>
 	/// Cartella da verificare tutte le sottocartelle
 	/// </summary>
-	public string DirectoryRoot {
+	public string DirectoryRoot
+	{
 		get;
 		set;
 	}
-	public void ReadDataInstanzaSql(string dataSourceName) {
+	public void ReadDataInstanzaSql(string dataSourceName)
+	{
 		ListDatabase.Clear();
 		ListMaster.Clear();
 		_testConn = new TestConnessione(dataSourceName);
-		if (_testConn.InstanceData == null) {
+		if (_testConn.InstanceData == null)
+		{
 			MessageBox.Show("Connessione non riuscita");
 			return;
 		}
 
-		RefreshDbList();
+		RefreshDbList(DirectoryProgettoCorrente);
 		var settingManager = new SettingManager();
 		var publicSett = settingManager.ReadPublicSetting();
-		if (!publicSett.InstanzeSql.Contains(dataSourceName)) {
+		if (!publicSett.InstanzeSql.Contains(dataSourceName))
+		{
 			publicSett.InstanzeSql.Add(dataSourceName);
 			settingManager.SaveSetting(publicSett);
 		}
@@ -152,12 +190,13 @@ internal class UIManager {
 		SelectedDataSource = dataSourceName;
 
 	}
-	public void LoadCommonFolder() {
+	private void LoadCommonFolder(string folder)
+	{
 		var listItem = new List<string>();
 
-		if (System.IO.Directory.Exists(DirectoryProgettoCorrente))
+		if (System.IO.Directory.Exists(folder))
 			foreach (var item in
-			  System.IO.Directory.GetDirectories(DirectoryProgettoCorrente, "*"
+			  System.IO.Directory.GetDirectories(folder, "*"
 			  , SearchOption.TopDirectoryOnly)
 
 			  .Select(a => new DirectoryInfo(a)).Where(a => a.Attributes != FileAttributes.Hidden
@@ -186,7 +225,8 @@ internal class UIManager {
 			  )
 			  .ToList()
 
-			  ) {
+			  )
+			{
 				listItem.Add(item.Name);
 			}
 
@@ -195,25 +235,33 @@ internal class UIManager {
 
 
 	}
-	public void ApplyDebug() {
+	public void ApplyDebug()
+	{
 
 		_testConn.ApplyDebug(SelectedDb);
 	}
-	public void AddMaster() {
-		if (string.IsNullOrEmpty(SelectedMaster)) {
-			try {
+	public void AddMaster()
+	{
+		if (string.IsNullOrEmpty(SelectedMaster))
+		{
+			try
+			{
 				_testConn.AddMaster(SelectedDb);
 				_testConn.RefreshMaster(SelectedDb);
-			} catch (SqlException ex) {
+			}
+			catch (SqlException ex)
+			{
 
 				MessageBox.Show(ex.Message, "Errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 			RefreshListMaster();
 		}
 	}
-	public void RefreshListMaster() {
+	public void RefreshListMaster()
+	{
 		var list = new List<string>();
-		try {
+		try
+		{
 
 			if (string.IsNullOrEmpty(SelectedDb))
 				return;
@@ -221,11 +269,14 @@ internal class UIManager {
 			var selectedDb = SelectedDb;
 
 			foreach (var item in _testConn.InstanceData.DbList.Where(a => a.Database == selectedDb).First()
-			  .MasterName) {
+			  .MasterName)
+			{
 				list.Add(item);
 			}
 
-		} finally {
+		}
+		finally
+		{
 			ListMaster = new ObservableCollection<string>(list);
 			if (ListMaster.Count > 0)
 				SelectedMaster = list[0];
@@ -238,16 +289,25 @@ internal class UIManager {
 	/// <summary>
 	/// filtra i database se quello della sottocartella database è presente sulla lista
 	/// </summary>
-	private void RefreshDbList() {
+	private void RefreshDbList(string folder)
+	{
 		Cursor.Current = Cursors.WaitCursor;
 
+		if (!Directory.Exists(folder))
+		{
+			folder = this.DirectoryListItems.Where(a => a.NomeProgetto == folder).FirstOrDefault().Percorso;
+		}
+
+
 		var listDb = new List<string>();
-		try {
+		try
+		{
 
 			List<string> listDbFolder = new List<string>();
 			var path = Path.Combine(
-			  DirectoryProgettoCorrente, "Database");
-			if (System.IO.Directory.Exists(path)) {
+			  folder, "Database");
+			if (System.IO.Directory.Exists(path))
+			{
 				listDbFolder = System.IO.Directory.EnumerateDirectories(path, "WS*", SearchOption.TopDirectoryOnly)
 
 				  .Select(a => new DirectoryInfo(a).Name).ToList();
@@ -258,36 +318,58 @@ internal class UIManager {
 					||
 				  a.EndsWith("_HELP", StringComparison.InvariantCultureIgnoreCase)
 				);
-				if (listDbFolder.Any() && listDbFolder.Count() > 1) {
+				if (listDbFolder.Any() && listDbFolder.Count() > 1)
+				{
 					listDbFolder.RemoveAll(a => !a.Equals(listDbFolder[0]));
 				}
 			}
 			var list = _testConn.InstanceData.DbList.Select(a => a.Database).ToList();
 			foreach (var item in list.Where(a =>
-			!listDbFolder.Any() || listDbFolder.Any() && a.Contains(listDbFolder.FirstOrDefault())).OrderBy(a => a)) {
+			!listDbFolder.Any() || listDbFolder.Any() && a.Contains(listDbFolder.FirstOrDefault())).OrderBy(a => a))
+			{
 				listDb.Add(item);
 			}
 
 			DbUpdateEnable = ListDatabase.Count > 0;
 
-		} finally {
+		}
+		finally
+		{
 			ListDatabase = new ObservableCollection<string>(listDb);
 		}
 
 
 		Cursor.Current = Cursors.Default;
 	}
-	public ObservableCollection<string> DirectoryListItems { get; set; } = new ObservableCollection<string>();
+	public class ProjectItem
+	{
+		public ProjectItem(string persorso)
+		{
+			Percorso = persorso;
+			NomeProgetto = persorso.Split(Path.DirectorySeparatorChar).Last();
+		}
+		public string NomeProgetto { get; set; }
+		public string Percorso { get; private set; }
 
-	private void DiscoverySubFolder() {
+		public override string ToString()
+		{
+			return NomeProgetto;
+		}
+	}
+	public ObservableCollection<ProjectItem> DirectoryListItems { get; set; } = new ObservableCollection<ProjectItem>();
+
+	private void DiscoverySubFolder()
+	{
 		DiscoverProjectFolder v = new DiscoverProjectFolder();
-		v.ProgressUpdate += (a, e) => {
+		v.ProgressUpdate += (a, e) =>
+		{
 			this.OnProgressUpdate(e.Percentage, e.Message);
 		};
 		var val = DirectoryListItems;
 
 		v.DiscoverySubFolder(ref val, DirectoryRoot); // Added 'ref' keyword to fix CS1620
-		v.ProgressUpdate -= (a, e) => {
+		v.ProgressUpdate -= (a, e) =>
+		{
 			this.OnProgressUpdate(e.Percentage, e.Message);
 		};
 		v = null;
@@ -295,11 +377,13 @@ internal class UIManager {
 	}
 
 
-	internal void RemoveDatasource(string text) {
+	internal void RemoveDatasource(string text)
+	{
 		var settingManager = new SettingManager();
 
 		var publicSett = settingManager.ReadPublicSetting();
-		if (publicSett.InstanzeSql.Contains(text)) {
+		if (publicSett.InstanzeSql.Contains(text))
+		{
 			publicSett.InstanzeSql.Remove(text);
 			publicSett.InstanzeSql = publicSett.InstanzeSql.Distinct().ToList();
 			settingManager.SaveSetting(publicSett);
@@ -307,14 +391,16 @@ internal class UIManager {
 
 		}
 		ListDataSource.Clear();
-		foreach (var item in publicSett.InstanzeSql) {
+		foreach (var item in publicSett.InstanzeSql)
+		{
 			ListDataSource.Add(item);
 
 		}
 
 	}
 
-	internal void SaveSetting() {
+	internal void SaveSetting()
+	{
 		var settingManager = new SettingManager();
 		var sett = settingManager.ReadSetting();
 		sett.InstanzaSql = SelectedDataSource;

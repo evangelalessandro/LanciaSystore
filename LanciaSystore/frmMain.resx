@@ -223,7 +223,7 @@
   <data name="btnAvvia.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAL
-        DQAACw0B7QfALAAAC09JREFUaEPNmAlQFGcWx59nTFSijnLMAMN9DIeAkeh6xdSmzFFJKtkrsdZS1xiP
+        DAAACwwBP0AiyAAAC09JREFUaEPNmAlQFGcWx59nTFSijnLMAMN9DIeAkeh6xdSmzFFJKtkrsdZS1xiP
         xETihRgMRpRLhhkQUW6+eQMKapAmrMqqUVHjEUGumeFGNOt9RFNbqU3zbX0zPbHtAAmjJvuqfvX+78/0
         +97X091TDYAo3EKGQPYVOaQ1O0N6s8tSrUlmUhvsfkwx2l1MM8mzs9qCfLLbwyCjRQnJdfYQ+MJQ8eG/
         f6wtHwsZHQpIb3bWphhH0i+uzKNV99K6q+5tpYfvxFFycSZNbXLQ53dMHpnbGQZ5N1wgunIsjFMOlLb6
@@ -671,7 +671,7 @@
   <data name="btnPacchettoSvn.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1
-        MAAA6mAAADqYAAAXcJy6UTwAAAAJcEhZcwAACw0AAAsNAe0HwCwAAAAHdElNRQfoCgsIETGnZt59AAAY
+        MAAA6mAAADqYAAAXcJy6UTwAAAAJcEhZcwAACwwAAAsMAT9AIsgAAAAHdElNRQfoCgsIETGnZt59AAAY
         7ElEQVRoQ82aCXQTV5rvFcjWhGRCM5k8mu5O0kk66WSmJ4EAgYRAhx3CEiCAGxLWsC/GBIODjTFeZYxt
         MHjFeN/3fZNteZFl2ZJtLZYsL/Iib5J3baUqSf7PKdmGQJh50+/Need95/xP6V6pqn7/7373VpUkBuP/
         w5g9ezbj9ddfZ8ybN4+xdu1aBpPJZOTm5jJiYmIYJpPp6Y//z8RLL73EWLBgAWPu3LlW/aPx+eefMy5c

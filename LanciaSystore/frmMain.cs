@@ -68,11 +68,11 @@ namespace LanciaSystore
 			{
 				Debug.WriteLine("Changed:" + e.PropertyName);
 			};
+			var progettoCorrente = Manager.DirectoryProgettoCorrente;
+			txtDirectory.SelectedValue = progettoCorrente;
 
-			txtDirectory.Text = Manager.DirectoryProgettoCorrente;
 
-
-			Manager.DirectoryProgettoCorrente = txtDirectory.Text;
+			Manager.DirectoryProgettoCorrente = progettoCorrente;
 			btnLeggiFileCommon.Enabled = false;
 
 			this.Text = Assembly.GetExecutingAssembly().GetName().Name + " " + typeof(LanciaSystore.frmMain).Assembly.GetName().Version;
@@ -113,7 +113,8 @@ namespace LanciaSystore
 				lstDatabase.DataBindings.Add("DataSource", Manager, "ListDatabase");
 
 				txtDirectory.DataBindings.Add("DataSource", Manager, "DirectoryListItems");
-
+				txtDirectory.ValueMember = "Percorso";
+				txtDirectory.DisplayMember = "NomeProgetto";
 				Manager.DirectoryProgettoCorrente = settPrivate.Directory;
 
 				lstMaster.DataBindings.Add("DataSource", Manager, "ListMaster");

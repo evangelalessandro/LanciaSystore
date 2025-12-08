@@ -77,11 +77,20 @@ internal class UIManager
 
 		}
 
+		var list = new List<ProjectItem>();
 		foreach (var item in settPubl.DirectoryList)
 		{
-			DirectoryListItems.Add(new ProjectItem(item));
+			list.Add(new ProjectItem(item));
 
 		}
+		foreach (var item in list.OrderBy(a => a.NomeProgetto))
+		{
+			if (!DirectoryListItems.Any(a => a.Percorso == item.Percorso))
+			{
+				DirectoryListItems.Add(item);
+			}
+		}
+
 
 		LoadCommonFolder(DirectoryProgettoCorrente);
 
@@ -148,11 +157,42 @@ internal class UIManager
 		var location = new Uri(Assembly.GetEntryAssembly().GetName().CodeBase);
 		return new FileInfo(location.AbsolutePath).Directory.FullName;
 	}
+	string _dirCorrente = "";
 	public string DirectoryProgettoCorrente
 	{
-		get;
-		set;
+		get { return _dirCorrente; }
+		set
+		{
+			_dirCorrente = value;
+			LoadProjectFolder(value);
+
+		}
 	}
+	private void LoadProjectFolder(string value)
+	{
+		if (value.Contains(@"\"))
+		{
+			if (DirectoryProgettoCorrente != value)
+				DirectoryProgettoCorrente = value;
+			var item = DirectoryListItems.Where(a => a.Percorso == value).FirstOrDefault();
+			if (item != null)
+			{
+				ProgettoCorrente = item.NomeProgetto;
+			}
+		}
+		else
+		{
+			var item = DirectoryListItems.Where(a => a.NomeProgetto == value).FirstOrDefault();
+			if (item != null)
+			{
+				if (DirectoryProgettoCorrente != item.Percorso)
+					DirectoryProgettoCorrente = item.Percorso;
+				ProgettoCorrente = item.NomeProgetto;
+			}
+		}
+	}
+
+
 	public string ProgettoCorrente
 	{
 		get;

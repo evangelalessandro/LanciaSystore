@@ -370,7 +370,7 @@ internal class UIManager
 				listDb.Add(item);
 			}
 
-			DbUpdateEnable = ListDatabase.Count > 0;
+			DbUpdateEnable = listDb.Count > 0;
 
 		}
 		finally

@@ -66,7 +66,8 @@ namespace LanciaSystore.Manager
 
 
 					}
-					File.WriteAllText(Path.Combine(folderDest, "dbo." + item.Name + ".sql"), item.Content, new UTF8Encoding());
+					if (folderDest.Length > 0)
+						File.WriteAllText(Path.Combine(folderDest, "dbo." + item.Name + ".sql"), item.Content, new UTF8Encoding());
 				}
 				MessageBox.Show("Trovate  " + listEmpty.Count().ToString() + " sp, generati i nuovi file e messi nelle cartelle ", "Info", MessageBoxButtons.OK, icon: MessageBoxIcon.Exclamation);
 			}
@@ -87,7 +88,7 @@ namespace LanciaSystore.Manager
 			!a.Contains(@"\Percorsi\") && !a.Contains(@"\Path\")))
 			{
 
-				var file = item.Split(@"\").Last();//.Replace("dbo.", "").Replace(".sql", ""); ;
+				var file = item.Split(@"\").Last().Replace("dbo.", "").Replace(".sql", ""); ;
 				var proc = listSpFromDb.List.FirstOrDefault(a => a.Name.Equals(file, StringComparison.InvariantCultureIgnoreCase));
 				if (proc != null)
 				{

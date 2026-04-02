@@ -3,21 +3,27 @@ using System;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace LanciaSystore {
-	internal class Exe_dbupodate {
+namespace LanciaSystore
+{
+	internal class Exe_dbupodate
+	{
 		public static string NameFile = "DBUpdate.exe";
 		private System.IO.FileInfo _fileExe;
 		private string _folder;
-		private string FolderDatabase {
-			get {
+		private string FolderDatabase
+		{
+			get
+			{
 				return System.IO.Path.Combine(_folder, @"Database");
 			}
 		}
-		public Exe_dbupodate(Manager.UIManager Manager) {
+		public Exe_dbupodate(Manager.UIManager Manager)
+		{
 			_folder = Manager.DirectoryProgettoCorrente;
 		}
 
-		private bool ExistsExe() {
+		private bool ExistsExe()
+		{
 			var path = System.IO.Path.Combine(FolderDatabase, @"DBScripting", NameFile);
 			_fileExe = new System.IO.FileInfo(path);
 
@@ -26,11 +32,14 @@ namespace LanciaSystore {
 			return true;
 
 		}
-		public void StartProcecure(UIManager manager) {
+		public void StartProcecure(UIManager manager)
+		{
 			StartProcecure(manager.SelectedDataSource, manager.SelectedDb);
 		}
-		private void StartProcecure(string sqlserverInstance, string database) {
-			if (!ExistsExe()) {
+		private void StartProcecure(string sqlserverInstance, string database)
+		{
+			if (!ExistsExe())
+			{
 				MessageBox.Show("Manca l'eseguibile");
 				return;
 			}
@@ -56,7 +65,8 @@ namespace LanciaSystore {
 			var settingManager = new SettingManager();
 			var publicSett = settingManager.ReadPublicSetting();
 			if (!publicSett.Lanci.Where(a => a.ExeFilePath == _fileExe.FullName &&
-			a.Argument == parameter).Any()) {
+			a.Argument == parameter).Any())
+			{
 				publicSett.Lanci.Add(new Settings.DatiLancio() { ExeFilePath = _fileExe.FullName, Argument = parameter });
 				settingManager.SaveSetting(publicSett);
 			}

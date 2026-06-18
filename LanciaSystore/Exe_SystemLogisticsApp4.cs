@@ -18,8 +18,9 @@ namespace LanciaSystore
 
 		public bool ExistsExe()
 		{
-			_fileExe = new System.IO.DirectoryInfo(_directory).EnumerateFiles(NameFile).FirstOrDefault();
+			_fileExe = new System.IO.DirectoryInfo(_directory).EnumerateFiles(NameFile, System.IO.SearchOption.AllDirectories).FirstOrDefault();
 			if (_fileExe == null)
+
 				return false;
 			return true;
 

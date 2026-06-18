@@ -171,6 +171,7 @@ namespace LanciaSystore
 
 		private void btnAvvia_Click(object sender, EventArgs e)
 		{
+			Manager.SelectedCommon = lstCommonFolder.Text;
 			var exe = new Exe_SystemLogisticsApp4(Manager.DirectoryProgettoCorrente);
 			exe.StrartProc(Manager);
 

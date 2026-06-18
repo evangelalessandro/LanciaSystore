@@ -66,7 +66,9 @@ namespace LanciaSystore.Manager
 
 					try
 					{
-						if (System.IO.Directory.GetFiles(root, "SystemLogisticsApp4.exe", System.IO.SearchOption.TopDirectoryOnly).Length == 0)
+						if (System.IO.Directory.GetFiles(root, "SystemLogisticsApp4.exe", System.IO.SearchOption.TopDirectoryOnly).Length == 0
+							&& System.IO.Directory.GetFiles(root, @"OUTPUT\SystemLogisticsApp4.exe", System.IO.SearchOption.TopDirectoryOnly).Length == 0
+							)
 							list.Remove(root);
 						else
 							Debug.WriteLine(dir);

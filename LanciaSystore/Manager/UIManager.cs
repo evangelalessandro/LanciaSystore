@@ -234,31 +234,59 @@ internal class UIManager
 	{
 		var listItem = new List<string>();
 
+		var project = this.DirectoryListItems.FirstOrDefault(a => a.Percorso == folder);
+
+
 		if (System.IO.Directory.Exists(folder))
-			foreach (var item in
-			  System.IO.Directory.GetDirectories(folder, "*"
+			if (!project.NewVersion)
+			{
+				foreach (var item in
+				  System.IO.Directory.GetDirectories(folder, "*"
+				  , SearchOption.TopDirectoryOnly)
+
+				  .Select(a => new DirectoryInfo(a)).Where(a => a.Attributes != FileAttributes.Hidden
+				  && a.Attributes != FileAttributes.Encrypted).ToList()
+				  .Where(a => !a.Name.Contains("DevExpress_") && !a.Name.Contains("SLBin")
+				  && !a.Name.Contains("Multimedia")
+				  && !a.Name.StartsWith("SL", StringComparison.InvariantCultureIgnoreCase)
+				  && !a.Name.Contains(".svn")
+				  && !a.Name.Contains("Database")
+				  && !a.Name.Contains(".vs")
+				  && !a.Name.Contains("Device")
+				  && !a.Name.Contains("Documenti")
+				  && !a.Name.Contains("Layout")
+				  && !a.Name.EndsWith("APP4", StringComparison.InvariantCultureIgnoreCase)
+				  && !a.Name.Equals("_Developers", StringComparison.InvariantCultureIgnoreCase)
+				  && !a.Name.Equals("_Patches", StringComparison.InvariantCultureIgnoreCase)
+				  && !a.Name.Equals("Setup", StringComparison.InvariantCultureIgnoreCase)
+				  && !a.Name.Contains("Simula")
+				  && !a.Name.Contains("CefSharp")
+				  && !a.Name.Contains("Directx", StringComparison.InvariantCultureIgnoreCase)
+				  && !a.Name.Contains("Common_mops", StringComparison.InvariantCultureIgnoreCase)
+				  && !a.Name.Contains("runtimes", StringComparison.InvariantCultureIgnoreCase)
+				  && !a.Name.Contains("debug", StringComparison.InvariantCultureIgnoreCase)
+
+
+				  )
+				  .ToList()
+
+				  )
+				{
+					listItem.Add(item.Name);
+				}
+			}
+			else
+			{
+				foreach (var item in
+			  System.IO.Directory.GetDirectories(System.IO.Path.Combine(folder, "OUTPUT"), "*"
 			  , SearchOption.TopDirectoryOnly)
 
 			  .Select(a => new DirectoryInfo(a)).Where(a => a.Attributes != FileAttributes.Hidden
 			  && a.Attributes != FileAttributes.Encrypted).ToList()
 			  .Where(a => !a.Name.Contains("DevExpress_") && !a.Name.Contains("SLBin")
 			  && !a.Name.Contains("Multimedia")
-			  && !a.Name.StartsWith("SL", StringComparison.InvariantCultureIgnoreCase)
-			  && !a.Name.Contains(".svn")
-			  && !a.Name.Contains("Database")
-			  && !a.Name.Contains(".vs")
-			  && !a.Name.Contains("Device")
-			  && !a.Name.Contains("Documenti")
-			  && !a.Name.Contains("Layout")
-			  && !a.Name.EndsWith("APP4", StringComparison.InvariantCultureIgnoreCase)
-			  && !a.Name.Equals("_Developers", StringComparison.InvariantCultureIgnoreCase)
-			  && !a.Name.Equals("_Patches", StringComparison.InvariantCultureIgnoreCase)
-			  && !a.Name.Equals("Setup", StringComparison.InvariantCultureIgnoreCase)
-			  && !a.Name.Contains("Simula")
-			  && !a.Name.Contains("CefSharp")
-			  && !a.Name.Contains("Directx", StringComparison.InvariantCultureIgnoreCase)
-			  && !a.Name.Contains("Common_mops", StringComparison.InvariantCultureIgnoreCase)
-			  && !a.Name.Contains("runtimes", StringComparison.InvariantCultureIgnoreCase)
+			  && !a.Name.StartsWith("Libs", StringComparison.InvariantCultureIgnoreCase)
+			&& !a.Name.StartsWith("SLBin", StringComparison.InvariantCultureIgnoreCase)
 			  && !a.Name.Contains("debug", StringComparison.InvariantCultureIgnoreCase)
 
 
@@ -266,10 +294,11 @@ internal class UIManager
 			  .ToList()
 
 			  )
-			{
-				listItem.Add(item.Name);
-			}
+				{
+					listItem.Add(item.Name);
+				}
 
+			}
 		ListCommonFolder = new ObservableCollection<string>(listItem);
 
 
@@ -335,7 +364,12 @@ internal class UIManager
 
 		if (!Directory.Exists(folder))
 		{
-			folder = this.DirectoryListItems.Where(a => a.NomeProgetto == folder).FirstOrDefault().Percorso;
+			var item = this.DirectoryListItems.Where(a => a.NomeProgetto == folder).FirstOrDefault();
+
+			if (item != null)
+				folder = item.Percorso;
+			else
+				folder = "";
 		}
 
 
@@ -387,9 +421,13 @@ internal class UIManager
 		{
 			Percorso = persorso;
 			NomeProgetto = persorso.Split(Path.DirectorySeparatorChar).Last();
+			if (Directory.Exists(System.IO.Path.Combine(persorso, "Output")))
+				NewVersion = true;
 		}
 		public string NomeProgetto { get; set; }
 		public string Percorso { get; private set; }
+
+		public bool NewVersion { get; set; } = false;
 
 		public override string ToString()
 		{

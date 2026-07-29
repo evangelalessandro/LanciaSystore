@@ -25,11 +25,11 @@ namespace LanciaSystore
 			return true;
 
 		}
-		public void StrartProc(UIManager manager)
+		public void StrartProc(UIManager manager, UIManager.ProjectItem project)
 		{
-			StrartProc(manager.SelectedDataSource, manager.SelectedMaster, manager.SelectedCommon, manager.SelectedDb, manager.SelectedDb);
+			StrartProc(manager.SelectedDataSource, manager.SelectedMaster, manager.SelectedCommon, manager.SelectedDb, manager.SelectedDb, project);
 		}
-		private void StrartProc(string sqlserverInstance, string MasterName, string commonFolder, string plantName, string database)
+		private void StrartProc(string sqlserverInstance, string MasterName, string commonFolder, string plantName, string database, UIManager.ProjectItem project)
 		{
 			if (!ExistsExe())
 			{
@@ -37,8 +37,18 @@ namespace LanciaSystore
 				return;
 			}
 			string parameter = "";
-			parameter = "PathFilesCommon={Common};DataSource={ServerSql};" +
+			if (project.NewVersion)
+			{
+				Environment.CurrentDirectory = _directory + @"\OUTPUT";
+				parameter = "DataSource={ServerSql};" +
 				"InitialCatalog={DB};Name={MASTER};PlantName={PLANTNAME};USER=SYSTEM;";
+			}
+			else
+			{
+				Environment.CurrentDirectory = _directory;
+				parameter = "PathFilesCommon={Common};DataSource={ServerSql};" +
+				"InitialCatalog={DB};Name={MASTER};PlantName={PLANTNAME};USER=SYSTEM;";
+			}
 
 			parameter = parameter.Replace("{Common}", commonFolder);
 			parameter = parameter.Replace("{ServerSql}", sqlserverInstance);
@@ -46,7 +56,7 @@ namespace LanciaSystore
 			parameter = parameter.Replace("{PLANTNAME}", plantName);
 			parameter = parameter.Replace("{DB}", database);
 
-			Environment.CurrentDirectory = _directory;
+
 
 			var proc = new System.Diagnostics.Process();
 			proc.StartInfo.FileName = _fileExe.FullName;

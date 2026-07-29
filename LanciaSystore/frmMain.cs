@@ -75,7 +75,12 @@ namespace LanciaSystore
 			Manager.DirectoryProgettoCorrente = progettoCorrente;
 			btnLeggiFileCommon.Enabled = false;
 
-			this.Text = Assembly.GetExecutingAssembly().GetName().Name + " " + typeof(LanciaSystore.frmMain).Assembly.GetName().Version;
+			string location = Assembly.GetExecutingAssembly().Location;
+			DateTime buildDate = File.GetLastWriteTime(location);
+			Console.WriteLine($"Ultima modifica (compilazione stimata): {buildDate}");
+
+
+			this.Text = Assembly.GetExecutingAssembly().GetName().Name + " " + typeof(LanciaSystore.frmMain).Assembly.GetName().Version + " " + buildDate.ToString("yyyy-MM-dd HH:mm:ss");
 
 			btnPacchettoSvn.Click += BtnPacchettoSvn_Click;
 
@@ -173,7 +178,9 @@ namespace LanciaSystore
 		{
 			Manager.SelectedCommon = lstCommonFolder.Text;
 			var exe = new Exe_SystemLogisticsApp4(Manager.DirectoryProgettoCorrente);
-			exe.StrartProc(Manager);
+			var project = Manager.DirectoryListItems.FirstOrDefault(a => a.Percorso == Manager.DirectoryProgettoCorrente);
+
+			exe.StrartProc(Manager, project);
 
 		}
 

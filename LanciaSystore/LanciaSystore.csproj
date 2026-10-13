@@ -24,10 +24,10 @@
 	  <Content Include="Resources\freepik__server_database_utility.ico" />
 	</ItemGroup>
 	<ItemGroup>
+	  <PackageReference Include="Microsoft.Data.SqlClient" Version="7.1.1" />
 	  <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
 	  <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" />
-	  <PackageReference Include="System.Data.SqlClient" Version="4.9.0" />
-	  <PackageReference Include="System.Linq.Async" Version="7.0.0" />
+	  <PackageReference Include="System.Linq.Async" Version="7.0.1" />
 	</ItemGroup>
 	<ItemGroup>
 	  <Folder Include="bin\" />

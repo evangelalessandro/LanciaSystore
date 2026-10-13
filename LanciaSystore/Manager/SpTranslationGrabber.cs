@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
-using System.IO;
-using System.Collections;
 using System.Data;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 
 namespace LanciaSystore.Manager
 {
@@ -73,7 +70,7 @@ namespace LanciaSystore.Manager
 			foreach (var item in tot)
 			{
 				_ = await _test.ExecCommand(sqlText, new SqlParameter[]
-					{ new System.Data.SqlClient.SqlParameter("@messaggio", item) });
+					{ new SqlParameter("@messaggio", item) });
 
 			}
 

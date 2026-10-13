@@ -1,10 +1,10 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Data.SqlClient;
+
 
 namespace LanciaSystore
 {
@@ -131,14 +131,15 @@ namespace LanciaSystore
 		private SqlConnection ProvaConnessione(string dataSource, string utente)
 		{
 
-			var sqlConnString = new System.Data.SqlClient.SqlConnectionStringBuilder();
+			var sqlConnString = new SqlConnectionStringBuilder();
 			sqlConnString.DataSource = dataSource;
 			sqlConnString.InitialCatalog = "Master";
 			sqlConnString.ConnectTimeout = 2;
 			sqlConnString.UserID = utente;
 			sqlConnString.Password = "SYS123";
+			sqlConnString.TrustServerCertificate = true;
 
-			var sqlConn = new System.Data.SqlClient.SqlConnection(sqlConnString.ConnectionString);
+			var sqlConn = new SqlConnection(sqlConnString.ConnectionString);
 			try
 			{
 				sqlConn.Open();
@@ -169,7 +170,7 @@ namespace LanciaSystore
 
 		private void EseguiCommand(string txtcomm)
 		{
-			System.Data.SqlClient.SqlCommand command = new System.Data.SqlClient.SqlCommand(
+			SqlCommand command = new SqlCommand(
 						txtcomm
 						, Connessione);
 			command.ExecuteNonQuery();

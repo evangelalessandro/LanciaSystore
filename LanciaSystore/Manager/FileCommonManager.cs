@@ -1,20 +1,12 @@
-﻿using Newtonsoft.Json.Linq;
-using System;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
-using System.Reflection.Metadata;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
-using System.Xml.Serialization;
-using static System.Formats.Asn1.AsnWriter;
-
+using Microsoft.Data.SqlClient;
 namespace LanciaSystore.Manager;
 
 internal class FileCommonManager
@@ -394,7 +386,8 @@ internal class FileCommonManager
 			{
 				ruolo = read.GetString(0);
 			}
-		};
+		}
+		;
 		await read.DisposeAsync();
 		if (ruolo == "")
 		{
@@ -536,10 +529,10 @@ internal class FileCommonManager
 
 		}
 		else
-		if (item.Link != null)
-		{
-			findCommonFile(item);
-		}
+			if (item.Link != null)
+			{
+				findCommonFile(item);
+			}
 		return item;
 	}
 
